@@ -1,7 +1,7 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
-        <a class="sidebar-brand" href="index.html">
-            <span class="align-middle">AdminKit</span>
+        <a class="sidebar-brand" href="{{ url('home') }}">
+            <span class="align-middle">{{ config('app.name') }}</span>
         </a>
 
         <ul class="sidebar-nav">
@@ -10,7 +10,7 @@
             </li>
 
             <li class="sidebar-item active">
-                <a class="sidebar-link" href="index.html">
+                <a class="sidebar-link" href="{{ url('home') }}">
                     <i class="align-middle" data-feather="sliders"></i>
                     <span class="align-middle">Dashboard</span>
                 </a>
@@ -29,6 +29,12 @@
                         <a class="sidebar-link" href="{{ url('admin/users/create') }}">Create User</a>
                     </li>
                 </ul>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ url('admin/listings') }}">
+                    <i class="align-middle" data-feather="map"></i>
+                    <span class="align-middle">Farmlands</span>
+                </a>
             </li>
         </ul>
     </div>
