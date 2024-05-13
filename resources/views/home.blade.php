@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => 'Dashboard'])
 @section('content')
 <div class="row">
     <div class="col-xl-6 col-xxl-5 d-flex">

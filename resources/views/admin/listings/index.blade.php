@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => 'Manage Farmlands'])
 @section('content')
 <div class="row">
     <div class="col-12 d-flex">

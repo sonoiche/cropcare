@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => 'Update User'])
 @section('content')
 <div class="row">
     <div class="col-6">
