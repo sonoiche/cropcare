@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UserDataTable extends DataTable
+class AgricultureDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,15 +22,10 @@ class UserDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->editColumn('created_at', function (User $user) {
-                return $user->created_at->format('F d, Y');
-            })
             ->editColumn('fname', function (User $user) {
-                return $user->fname . ' ' . $user->lname;
+                return $user->fullname;
             })
-            ->addColumn('action', function (User $user) {
-                return view('admin.users.action', compact('user'));
-            })
+            ->addColumn('action', 'admin.agricultures.action')
             ->setRowId('id');
     }
 
@@ -39,7 +34,7 @@ class UserDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->where('role', 'Admin');
+        return $model->where('role', User::ROLE_AGRICULTURIST);
     }
 
     /**
@@ -48,11 +43,11 @@ class UserDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('user-table')
+            ->setTableId('agriculture-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(0)
+            ->orderBy(0, 'asc')
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -68,15 +63,12 @@ class UserDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make(['data' => 'created_at', 'title' => 'Date Created']),
-            Column::make(['data' => 'fname', 'title' => 'Fullname']),
-            Column::make(['data' => 'email', 'title' => 'Email Address']),
-            Column::make(['data' => 'role', 'title' => 'Role']),
-            Column::make(['data' => 'status', 'title' => 'Status']),
+            Column::make(['data' => 'fname', 'title' => 'Name']),
+            Column::make(['data' => 'role']),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(120)
+                ->width(150)
                 ->addClass('text-center'),
         ];
     }
@@ -86,6 +78,6 @@ class UserDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'User_' . date('YmdHis');
+        return 'Agriculture_' . date('YmdHis');
     }
 }

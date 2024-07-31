@@ -18,7 +18,7 @@
 </div>
 @if (auth()->user()->role == 'Admin')
 <div class="mb-3">
-    <label class="form-label">Role</label>
+    <label class="form-label">Role {{ $user->role }}</label>
     <select name="role" id="role" class="form-select">
         <option value="">--</option>
         <option value="Admin" {{ (isset($user->role) && $user->role == 'Admin') ? 'selected' : '' }}>Admin</option>
@@ -27,13 +27,13 @@
     </select>
 </div>
 @endif
-<div id="president-content" style="display: none">
+<div id="president-content" style="{{ ($user->role == 'President') ? '' : 'display: none' }}">
     <div class="mb-3">
-        <label class="form-label">Barangay</label>
+        <label class="form-label">Barangay </label>
         <input type="text" name="barangay" id="barangay" class="form-control" placeholder="Barangay" value="{{ $user->barangay ?? '' }}" />
     </div>
     <div class="mb-3">
-        <label class="form-label">Barangay</label>
+        <label class="form-label">Association</label>
         <select name="association_id" id="association_id" class="form-select">
             <option value="">Select Association</option>
             @foreach ($associations as $association)

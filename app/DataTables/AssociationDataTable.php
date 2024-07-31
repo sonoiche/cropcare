@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\User;
+use App\Models\Association;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UserDataTable extends DataTable
+class AssociationDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,24 +22,19 @@ class UserDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->editColumn('created_at', function (User $user) {
-                return $user->created_at->format('F d, Y');
+            ->editColumn('created_at', function (Association $item) {
+                return $item->created_at->format('F d, Y');
             })
-            ->editColumn('fname', function (User $user) {
-                return $user->fname . ' ' . $user->lname;
-            })
-            ->addColumn('action', function (User $user) {
-                return view('admin.users.action', compact('user'));
-            })
+            ->addColumn('action', 'admin.associations.action')
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(User $model): QueryBuilder
+    public function query(Association $model): QueryBuilder
     {
-        return $model->where('role', 'Admin');
+        return $model->newQuery();
     }
 
     /**
@@ -48,11 +43,11 @@ class UserDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('user-table')
+            ->setTableId('association-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(0)
+            ->orderBy(0,'asc')
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -68,15 +63,12 @@ class UserDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make(['data' => 'created_at', 'title' => 'Date Created']),
-            Column::make(['data' => 'fname', 'title' => 'Fullname']),
-            Column::make(['data' => 'email', 'title' => 'Email Address']),
-            Column::make(['data' => 'role', 'title' => 'Role']),
-            Column::make(['data' => 'status', 'title' => 'Status']),
+            Column::make(['data' => 'name', 'title' => 'Association Name']),
+            Column::make(['data' => 'created_at', 'title' => 'Created Date']),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(120)
+                ->width(150)
                 ->addClass('text-center'),
         ];
     }
@@ -86,6 +78,6 @@ class UserDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'User_' . date('YmdHis');
+        return 'Association_' . date('YmdHis');
     }
 }

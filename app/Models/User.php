@@ -18,6 +18,8 @@ class User extends Authenticatable
      */
     protected $guarded = [];
 
+    CONST ROLE_AGRICULTURIST = "Department of Agriculture";
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -39,5 +41,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected $appends = ['fullname'];
+
+    public function getFullnameAttribute()
+    {
+        $fname = $this->attributes['fname'] ?? '';
+        $lname = $this->attributes['lname'] ?? '';
+
+        if($fname && $lname) {
+            return $fname . ' ' . $lname;
+        }
+
+        return '';
     }
 }

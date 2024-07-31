@@ -59,7 +59,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col mt-0">
-                                    <h5 class="card-title">Users</h5>
+                                    <h5 class="card-title">Registered Users</h5>
                                 </div>
 
                                 <div class="col-auto">

@@ -9,12 +9,13 @@
             <div class="card-body">
                 <div class="tab tab-success">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('admin/presidents') }}">Presidents</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="{{ url('admin/presidents') }}">Presidents</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('admin/agricultures') }}">Agriculturists</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="{{ url('admin/users') }}">Admin Users</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('admin/users') }}">Admin Users</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="user-1" role="tabpanel">
+                            <h4 class="tab-title">Default tabs</h4>
                             {!! $dataTable->table() !!}
                         </div>
                     </div>

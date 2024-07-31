@@ -3,16 +3,17 @@
 namespace App\DataTables;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use App\Models\FarmMember;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class UserDataTable extends DataTable
+class PresidentDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,15 +23,13 @@ class UserDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->editColumn('created_at', function (User $user) {
-                return $user->created_at->format('F d, Y');
-            })
             ->editColumn('fname', function (User $user) {
-                return $user->fname . ' ' . $user->lname;
+                return $user->fullname;
             })
-            ->addColumn('action', function (User $user) {
-                return view('admin.users.action', compact('user'));
+            ->editColumn('members', function (User $user) {
+                return FarmMember::where('association_id', $user->association_id)->count();
             })
+            ->addColumn('action', 'admin.presidents.action')
             ->setRowId('id');
     }
 
@@ -39,7 +38,9 @@ class UserDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->where('role', 'Admin');
+        return $model->join('associations','associations.id','=','users.association_id')
+            ->select('associations.name', 'associations.id as association_id', 'users.*')
+            ->where('role', 'President');
     }
 
     /**
@@ -48,10 +49,10 @@ class UserDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('user-table')
+            ->setTableId('president-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtip')
+            ->dom('Bfrtip', 'asc')
             ->orderBy(0)
             ->selectStyleSingle()
             ->buttons([
@@ -68,15 +69,17 @@ class UserDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make(['data' => 'created_at', 'title' => 'Date Created']),
-            Column::make(['data' => 'fname', 'title' => 'Fullname']),
-            Column::make(['data' => 'email', 'title' => 'Email Address']),
-            Column::make(['data' => 'role', 'title' => 'Role']),
-            Column::make(['data' => 'status', 'title' => 'Status']),
+            Column::make(['data' => 'fname', 'title' => 'Name']),
+            Column::make(['data' => 'barangay', 'title' => 'Barangay']),
+            Column::make(['data' => 'name', 'title' => 'Association Name']),
+            Column::make(['data' => 'members', 'title' => 'Members'])
+                ->searchable(false)
+                ->sortable(false)
+                ->addClass('text-center'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(120)
+                ->width(150)
                 ->addClass('text-center'),
         ];
     }
@@ -86,6 +89,6 @@ class UserDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'User_' . date('YmdHis');
+        return 'President_' . date('YmdHis');
     }
 }
