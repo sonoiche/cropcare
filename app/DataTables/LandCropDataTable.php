@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ListingDataTable extends DataTable
+class LandCropDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,13 +22,7 @@ class ListingDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->editColumn('created_at', function (LandCrop $item) {
-                return $item->created_at->format('F d, Y');
-            })
-            ->editColumn('acre_value', function (LandCrop $item) {
-                return 'P'.number_format($item->acre_value, 2);
-            })
-            ->addColumn('action', 'president.farms.action')
+            ->setTotalRecords(-1)
             ->setRowId('id');
     }
 
@@ -47,10 +41,10 @@ class ListingDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('listing-table')
+            ->setTableId('landcrop-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtip')
+            ->dom('Bfrt')
             ->orderBy(0)
             ->selectStyleSingle()
             ->buttons([
@@ -67,23 +61,12 @@ class ListingDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make(['data' => 'created_at', 'title' => 'Date Created']),
-            Column::make(['data' => 'acres', 'title' => 'Acres'])
-                ->addClass('text-center')
-                ->searchable(false)
-                ->orderable(false),
-            Column::make(['data' => 'acre_value', 'title' => 'Acre Value']),
+            Column::make(['data' => 'created_at', 'title' => 'Date']),
             Column::make(['data' => 'name', 'title' => 'Association']),
-            Column::make(['data' => 'status', 'title' => 'Status'])
-                ->addClass('text-center')
-                ->searchable(false)
-                ->orderable(false),
+            Column::make(['data' => 'status', 'title' => 'Status']),
             Column::make(['data' => 'crop_name', 'title' => 'Crop Name']),
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(150)
-                ->addClass('text-center'),
+            Column::make(['data' => 'crop_count', 'title' => 'Crop Count']),
+            Column::make(['data' => 'crop_yield', 'title' => 'Crop Yield']),
         ];
     }
 
@@ -92,6 +75,6 @@ class ListingDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Listing_' . date('YmdHis');
+        return 'LandCrop_' . date('YmdHis');
     }
 }

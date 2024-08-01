@@ -31,10 +31,32 @@
                 </ul>
             </li>
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ url('president/listings') }}">
+                <a data-bs-target="#manage-farms" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
                     <i class="align-middle" data-feather="map"></i>
-                    <span class="align-middle">Manage Farmlands</span>
+                    <span class="align-middle">Manage Farm Land</span>
                 </a>
+                <ul id="manage-farms" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ url('president/farms') }}">List of Land</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ url('president/farms/create') }}">Add New Farm Land</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item">
+                <a data-bs-target="#reports-land" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
+                    <i class="align-middle" data-feather="users"></i>
+                    <span class="align-middle">Reports</span>
+                </a>
+                <ul id="reports-land" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ url('president/reports/lands') }}">Land Reports</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ url('president/reports/farmers') }}">Farmer Reports</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>

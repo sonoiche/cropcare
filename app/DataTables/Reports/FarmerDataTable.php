@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTables;
+namespace App\DataTables\Reports;
 
 use App\Models\FarmMember;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
@@ -22,15 +22,14 @@ class FarmerDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->editColumn('photo', function (FarmMember $farmer) {
-                return '<img src="'.$farmer->photo.'" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover; border-radius: 99999px; border: 1px solid #333" />';
-            })
             ->editColumn('created_at', function (FarmMember $farmer) {
                 return $farmer->created_at->format('F d, Y');
             })
-            ->addColumn('action', 'president.farmers.action')
-            ->setRowId('id')
-            ->rawColumns(['photo','action']);
+            ->editColumn('fname', function (FarmMember $farmer) {
+                return $farmer->fullname;
+            })
+            ->setTotalRecords(-1)
+            ->setRowId('id');
     }
 
     /**
@@ -38,8 +37,7 @@ class FarmerDataTable extends DataTable
      */
     public function query(FarmMember $model): QueryBuilder
     {
-        return $model->join('associations','farm_members.association_id','=','associations.id')
-            ->select('farm_members.*','associations.name');
+        return $model->newQuery();
     }
 
     /**
@@ -51,8 +49,8 @@ class FarmerDataTable extends DataTable
             ->setTableId('farmer-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(1)
+            ->dom('Bfrt')
+            ->orderBy(0)
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -68,20 +66,10 @@ class FarmerDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make(['data' => 'photo', 'title' => ''])
-                ->searchable(false)
-                ->orderable(false)
-                ->addClass('text-center'),
-            Column::make(['data' => 'created_at', 'title' => 'Created Date']),
-            Column::make(['data' => 'fname', 'title' => 'Fullname']),
+            Column::make(['data' => 'created_at', 'title' => 'Registered Date']),
+            Column::make(['data' => 'fname', 'title' => 'Farmer Name']),
             Column::make(['data' => 'contact_number', 'title' => 'Contact Number']),
-            Column::make(['data' => 'name', 'title' => 'Association']),
             Column::make(['data' => 'barangay', 'title' => 'Barangay']),
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(150)
-                ->addClass('text-center'),
         ];
     }
 

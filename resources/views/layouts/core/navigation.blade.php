@@ -146,7 +146,7 @@
                     <img src="{{ url('assets/img/avatars/avatar.jpg') }}" class="avatar img-fluid rounded me-1" alt="{{ auth()->user()->fname }}" /> <span class="text-dark">{{ auth()->user()->fname }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="{{ url('admin/users', auth()->user()->id) }}/edit">
+                    <a class="dropdown-item" href="{{ url(strtolower(auth()->user()->role) . '/users', auth()->user()->id) }}/edit">
                         <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
                     </a>
                     <div class="dropdown-divider"></div>

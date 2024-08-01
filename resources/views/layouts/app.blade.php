@@ -22,13 +22,7 @@
 
     <body>
         <div class="wrapper">
-            @if (auth()->user()->role === 'Admin')
-            @include('layouts.roles.admin')
-            @endif
-
-            @if (auth()->user()->role === 'President')
-            @include('layouts.roles.president')
-            @endif
+            @include('layouts.roles.' . strtolower(auth()->user()->role))
 
             <div class="main">
                 @include('layouts.core.navigation')

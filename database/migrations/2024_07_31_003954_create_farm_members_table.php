@@ -14,13 +14,17 @@ return new class extends Migration
         Schema::create('farm_members', function (Blueprint $table) {
             $table->id();
             $table->integer('association_id');
+            $table->integer('president_id');
             $table->string('fname');
             $table->string('mname')->nullable();
             $table->string('lname');
+            $table->string('contact_number')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('provice')->nullable();
             $table->bigInteger('zip_code')->nullable();
+            $table->string('barangay')->nullable();
+            $table->string('photo')->nullable();
             $table->timestamps();
         });
     }

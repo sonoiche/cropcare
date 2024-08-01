@@ -1,10 +1,10 @@
-@extends('layouts.app', ['page_title' => 'Manage Farmers'])
+@extends('layouts.app', ['page_title' => 'Manage Land Crops'])
 @section('content')
 <div class="row">
     <div class="col-12 d-flex">
         <div class="card flex-fill">
             <div class="card-header">
-                <h5 class="card-title mb-0">List of Farmers</h5>
+                <h5 class="card-title mb-0">List of Land Crops</h5>
             </div>
             <div class="card-body">
                 {!! $dataTable->table() !!}
