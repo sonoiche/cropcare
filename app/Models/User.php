@@ -19,6 +19,7 @@ class User extends Authenticatable
     protected $guarded = [];
 
     CONST ROLE_AGRICULTURIST = "Agriculturist";
+    CONST ROLE_PRESIDENT = "ROLE_PRESIDENT";
 
     /**
      * The attributes that should be hidden for serialization.
