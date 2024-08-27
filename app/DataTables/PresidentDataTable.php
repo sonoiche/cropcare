@@ -40,7 +40,7 @@ class PresidentDataTable extends DataTable
     {
         return $model->join('associations','associations.id','=','users.association_id')
             ->select('associations.name', 'associations.id as association_id', 'users.*')
-            ->where('role', 'President');
+            ->where('role', User::ROLE_PRESIDENT);
     }
 
     /**
