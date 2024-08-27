@@ -23,14 +23,14 @@ class FarmerDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->editColumn('photo', function (FarmMember $farmer) {
-                return '<img src="'.$farmer->photo.'" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover; border-radius: 99999px; border: 1px solid #333" />';
+                return '<img src="' . $farmer->display_photo . '" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover; border-radius: 99999px; border: 1px solid #333" />';
             })
             ->editColumn('created_at', function (FarmMember $farmer) {
                 return $farmer->created_at->format('F d, Y');
             })
             ->addColumn('action', 'president.farmers.action')
             ->setRowId('id')
-            ->rawColumns(['photo','action']);
+            ->rawColumns(['photo', 'action']);
     }
 
     /**
@@ -38,8 +38,8 @@ class FarmerDataTable extends DataTable
      */
     public function query(FarmMember $model): QueryBuilder
     {
-        return $model->join('associations','farm_members.association_id','=','associations.id')
-            ->select('farm_members.*','associations.name');
+        return $model->join('associations', 'farm_members.association_id', '=', 'associations.id')
+            ->select('farm_members.*', 'associations.name');
     }
 
     /**
@@ -73,7 +73,7 @@ class FarmerDataTable extends DataTable
                 ->orderable(false)
                 ->addClass('text-center'),
             Column::make(['data' => 'created_at', 'title' => 'Created Date']),
-            Column::make(['data' => 'fname', 'title' => 'Fullname']),
+            Column::make(['data' => 'fullname', 'title' => 'Fullname']),
             Column::make(['data' => 'contact_number', 'title' => 'Contact Number']),
             Column::make(['data' => 'name', 'title' => 'Association']),
             Column::make(['data' => 'barangay', 'title' => 'Barangay']),

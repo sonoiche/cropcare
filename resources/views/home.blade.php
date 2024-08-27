@@ -1,10 +1,10 @@
 @extends('layouts.app', ['page_title' => 'Dashboard'])
 @section('content')
 <div class="row">
-    <div class="col-xl-6 col-xxl-5 d-flex">
+    <div class="col-xl-12 col-xxl-12 d-flex">
         <div class="w-100">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -21,6 +21,8 @@
                             <h1 class="mt-1 mb-3">0</h1>
                         </div>
                     </div>
+                </div>
+                <div class="col-sm-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -38,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -55,6 +57,8 @@
                             <h1 class="mt-1 mb-3">P0.00</h1>
                         </div>
                     </div>
+                </div>
+                <div class="col-sm-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -75,20 +79,8 @@
             </div>
         </div>
     </div>
-
-    <div class="col-xl-6 col-xxl-7">
-        <div class="card flex-fill w-100">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Recent Movement</h5>
-            </div>
-            <div class="card-body py-3">
-                <div class="chart chart-sm">
-                    <canvas id="chartjs-dashboard-line"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+@include('widgets.home.' . strtolower(auth()->user()->role))
 @endsection
 
 @push('scripts')
@@ -154,8 +146,7 @@
             },
         });
     });
-</script>
-<script>
+    
     document.addEventListener("DOMContentLoaded", function () {
         // Pie chart
         new Chart(document.getElementById("chartjs-dashboard-pie"), {
@@ -180,8 +171,7 @@
             },
         });
     });
-</script>
-<script>
+    
     document.addEventListener("DOMContentLoaded", function () {
         // Bar chart
         new Chart(document.getElementById("chartjs-dashboard-bar"), {
@@ -230,8 +220,7 @@
             },
         });
     });
-</script>
-<script>
+    
     document.addEventListener("DOMContentLoaded", function () {
         var markers = [
             {
@@ -298,8 +287,7 @@
             map.updateSize();
         });
     });
-</script>
-<script>
+
     document.addEventListener("DOMContentLoaded", function () {
         var date = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
         var defaultDate = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
@@ -310,5 +298,27 @@
             defaultDate: defaultDate,
         });
     });
+
+    function changeStatus(id, status) {
+        if(confirm('Are you sure you want to ' + status + ' this?')) {
+            $.ajax({
+                type: "GET",
+                url: "{{ url('agriculturist/consultations') }}/" + id + "?status=" + status,
+                dataType: "json",
+                success: function (response) {
+                    $('#consultation-title').html(response.consultation.title);
+                    $('#consultation-farmer').html(response.consultation.farmer_fullname);
+                    $('#consultation-concern').html(response.consultation.concern);
+                    $('#consultation-president').html(response.president.fullname);
+                    $('#consultation-location').html(response.consultation.location);
+                    $('#modal-consultation').modal('show');
+
+                    if(status === 'Resolved') {
+                        location.reload();
+                    }
+                }
+            });
+        }
+    }
 </script>
 @endpush

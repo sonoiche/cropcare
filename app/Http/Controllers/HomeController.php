@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultation;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data['user']   = auth()->user();
+        // Agriculturist
+        if (auth()->user()->role === 'Agriculturist') {
+            $data['consultations'] = Consultation::with(['land'])
+                ->where('status', '!=', 'Resolve')
+                ->latest()
+                ->limit(5)
+                ->get();
+        }
+
+        return view('home', $data);
     }
 }

@@ -1,16 +1,6 @@
-<div class="row">
-    <div class="col-6">
-        <div class="mb-3">
-            <label class="form-label">First Name</label>
-            <input type="text" name="fname" class="form-control" placeholder="First Name" value="{{ $farmer->fname ?? '' }}" />
-        </div>
-    </div>
-    <div class="col-6">
-        <div class="mb-3">
-            <label class="form-label">Last Name</label>
-            <input type="text" name="lname" class="form-control" placeholder="Last Name" value="{{ $farmer->lname ?? '' }}" />
-        </div>
-    </div>
+<div class="mb-3">
+    <label class="form-label">Fullname</label>
+    <input type="text" name="fullname" class="form-control" placeholder="Fullname" value="{{ $farmer->fullname ?? '' }}" />
 </div>
 <div class="mb-3">
     <label class="form-label">Contact Number</label>

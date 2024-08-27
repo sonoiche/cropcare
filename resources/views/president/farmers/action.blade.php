@@ -4,6 +4,6 @@
     </button>
     <div class="dropdown-menu" style="">
         <a class="dropdown-item text-black-50" href="{{ url('president/farmers', $id) }}/edit">Edit User</a>
-        <a class="dropdown-item text-black-50" href="javascript:;" onclick="removeFaarmer({{ $id }})">Delete</a>
+        <a class="dropdown-item text-black-50" href="javascript:;" onclick="removeFarmer({{ $id }})">Delete</a>
     </div>
 </div>

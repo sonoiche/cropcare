@@ -1,0 +1,122 @@
+<?php
+
+namespace App\Http\Controllers\President;
+
+use App\DataTables\GeographicDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\President\GisRequest;
+use App\Models\Consultation;
+use App\Models\FarmMember;
+use App\Models\Geographic;
+use Illuminate\Http\Request;
+
+class GeographicController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(GeographicDataTable $dataTable)
+    {
+        return $dataTable->render('president.geographics.index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
+    {
+        $consultation_id        = $request['consultation_id'];
+        $consultation           = Consultation::find($consultation_id);
+        $data['consultation']   = $consultation;
+
+        if (isset($consultation_id)) {
+            $gis = Geographic::where('consultation_id', $consultation_id)->first();
+            return redirect()->to('president/geographics/' . $gis->id . '/edit');
+        }
+
+        return view('president.geographics.create', $data);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(GisRequest $request)
+    {
+        $farmer = FarmMember::firstOrCreate([
+            'fullname'       => $request['fullname'],
+            'association_id' => auth()->user()->association_id,
+            'president_id'   => auth()->user()->id
+        ]);
+
+        $gis = new Geographic();
+        $gis->president_id      = auth()->user()->id;
+        $gis->association_id    = auth()->user()->association_id;
+        $gis->farmer_id         = $farmer->id;
+        $gis->consultation_id   = $request['consultation_id'];
+        $gis->location          = $request['location'];
+        $gis->name              = $request['name'];
+        $gis->description       = $request['description'];
+        $gis->consultation      = $request['consultation'];
+        $gis->remarks           = $request['remarks'];
+        $gis->latitude          = $request['latitude'];
+        $gis->longitude         = $request['longitude'];
+        $gis->crop_name         = $request['crop_name'];
+        $gis->crop_count        = $request['crop_count'];
+        $gis->crop_yield        = $request['crop_yield'];
+        $gis->save();
+
+        return redirect()->to('president/geographics')->with('success', 'GIS has been added.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $data['gis'] = Geographic::find($id);
+
+        return view('president.geographics.show', $data);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $data['gis'] = $gis = Geographic::find($id);
+        $data['farmer'] = FarmMember::find($gis->farmer_id);
+        return view('president.geographics.edit', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(GisRequest $request, string $id)
+    {
+        $gis = Geographic::find($id);
+        $gis->location          = $request['location'];
+        $gis->name              = $request['name'];
+        $gis->description       = $request['description'];
+        $gis->consultation      = $request['consultation'];
+        $gis->remarks           = $request['remarks'];
+        $gis->latitude          = $request['latitude'];
+        $gis->longitude         = $request['longitude'];
+        $gis->crop_name         = $request['crop_name'];
+        $gis->crop_count        = $request['crop_count'];
+        $gis->crop_yield        = $request['crop_yield'];
+        $gis->save();
+
+        return redirect()->to('president/geographics')->with('success', 'GIS has been updated.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $gis = Geographic::find($id);
+        $gis->delete();
+
+        return response()->json(200);
+    }
+}

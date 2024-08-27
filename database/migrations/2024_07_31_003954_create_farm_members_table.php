@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('association_id');
             $table->integer('president_id');
-            $table->string('fname');
-            $table->string('mname')->nullable();
-            $table->string('lname');
+            $table->string('fullname')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();

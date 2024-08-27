@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\LandCrop;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -22,6 +23,9 @@ class LandCropDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->editColumn('created_at', function (LandCrop $land) {
+                return $land->created_at->format('F d, Y');
+            })
             ->setTotalRecords(-1)
             ->setRowId('id');
     }
@@ -31,8 +35,15 @@ class LandCropDataTable extends DataTable
      */
     public function query(LandCrop $model): QueryBuilder
     {
-        return $model->join('associations','associations.id','=','land_crops.association_id')
-            ->select('land_crops.*','associations.name');
+        $daterange = $this->daterange;
+        return $model->join('associations', 'associations.id', '=', 'land_crops.association_id')
+            ->select('land_crops.*', 'associations.name')
+            ->when($daterange, function ($query, $daterange) {
+                $date = explode('-', $daterange);
+                $from = Carbon::parse($date[0])->format('Y-m-d');
+                $to   = Carbon::parse($date[1])->format('Y-m-d');
+                return $query->whereRaw("date(land_crops.created_at) between ? and ?", [$from, $to]);
+            });
     }
 
     /**

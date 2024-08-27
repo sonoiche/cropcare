@@ -12,26 +12,26 @@ class FarmMember extends Model
 
     protected $table = "farm_members";
     protected $guarded = [];
-    protected $appends = ['fullname','created_date'];
+    protected $appends = ['created_date', 'display_photo'];
 
-    public function getFullnameAttribute()
+    public function getCreatedDateAttribute()
     {
-        $fname = $this->attributes['fname'] ?? '';
-        $lname = $this->attributes['lname'] ?? '';
-        if($fname && $lname) {
-            return $fname . ' ' . $lname;
+        $created_at = $this->attributes['created_at'] ?? '';
+        if ($created_at) {
+            return Carbon::parse($created_at)->format('F d, Y');
         }
 
         return '';
     }
 
-    public function getCreatedDateAttribute()
+    public function getDisplayPhotoAttribute()
     {
-        $created_at = $this->attributes['created_at'] ?? '';
-        if($created_at) {
-            return Carbon::parse($created_at)->format('F d, Y');
+        $photo = $this->attributes['photo'] ?? '';
+        if ($photo) {
+            return url($photo);
         }
 
-        return '';
+        $name = str_replace(" ", "+", $this->fullname);
+        return 'https://ui-avatars.com/api/?name=' . $name . '&background=random';
     }
 }
