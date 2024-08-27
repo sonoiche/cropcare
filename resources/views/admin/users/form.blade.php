@@ -22,7 +22,7 @@
     <select name="role" id="role" class="form-select">
         <option value="">--</option>
         <option value="Admin" {{ (isset($user->role) && $user->role == 'Admin') ? 'selected' : '' }}>Admin</option>
-        <option value="Department of Agriculture" {{ (isset($user->role) && $user->role == 'Department of Agriculture') ? 'selected' : '' }}>Department of Agriculture</option>
+        <option value="Agriculturist" {{ (isset($user->role) && $user->role == 'Agriculturist') ? 'selected' : '' }}>Agriculturist</option>
         <option value="President" {{ (isset($user->role) && $user->role == 'President') ? 'selected' : '' }}>President</option>
     </select>
 </div>
