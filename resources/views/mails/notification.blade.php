@@ -20,8 +20,8 @@
 <body>
     <div class="content">
         <h3>Hi, {{ $president->fname }}!</h3>
-        <p>{{ $message }}</p>
-        <p>Agriculturist: <h3>{{ $user->fullname }}</h3></p>
+        <p>{{ ($consultation->status == 'Under Review') ? 'The consultation you submitted is currently under review by one of the Agriculturist.' : 'The consultation you submitted is now Resolve.' }}</p>
+        <p>Agriculturist: <b>{{ $user->fullname }}</b></p>
         <br><br>
         <p>Best regards,</p>
         <p>{{ config('app.name') }}</p>

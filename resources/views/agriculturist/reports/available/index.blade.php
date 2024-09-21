@@ -5,10 +5,10 @@
         <div class="card flex-fill">
             <div class="card-header d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0">Land Report</h5>
+                    <h5 class="card-title mb-0">Available Lands</h5>
                 </div>
                 <div style="width: 50%">
-                    <form action="{{ url('president/reports/lands') }}" method="get" class="d-flex justify-cotent-end">
+                    <form action="{{ url('president/reports/available-lands') }}" method="get" class="d-flex justify-cotent-end">
                         <div class="input-group mb-3" style="width: 40%; margin-right: 10px">
                             <span class="input-group-text">
                                 <i class="fa fa-calendar" id="date-icon"></i>

@@ -22,8 +22,7 @@ class FarmerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fname'             => 'required',
-            'lname'             => 'required',
+            'fullname'          => 'required',
             'contact_number'    => 'required',
             'photo'             => 'nullable|sometimes|image'
         ];
@@ -32,8 +31,7 @@ class FarmerRequest extends FormRequest
     public function messages()
     {
         return [
-            'fname.required'    => 'The first name field is required.',
-            'lname.required'    => 'The last name field is required.'
+            'fullname.required' => 'The farmer\'s fullname field is required.'
         ];
     }
 }

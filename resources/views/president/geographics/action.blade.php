@@ -3,6 +3,7 @@
         Action
     </button>
     <div class="dropdown-menu" style="">
+        <a class="dropdown-item text-black-50" href="{{ url('president/geographics', $id) }}">View Info</a>
         <a class="dropdown-item text-black-50" href="{{ url('president/geographics', $id) }}/edit">Edit</a>
         <a class="dropdown-item text-black-50" href="javascript:;" onclick="removeGeographic({{ $id }})">Delete</a>
     </div>

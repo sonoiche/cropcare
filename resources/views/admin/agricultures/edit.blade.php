@@ -17,6 +17,7 @@
                     <div class="d-flex justify-content-end">
                         <a href="{{ url('admin/users') }}" class="btn btn-outline-danger">Cancel</a> &nbsp;
                         <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <input type="hidden" name="id" value="{{ $user->id }}" />
                     </div>
                 </form>
             </div>

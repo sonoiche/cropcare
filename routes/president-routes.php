@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\President\UserController;
 use App\Http\Controllers\President\FarmerController;
 use App\Http\Controllers\President\FarmLandController;
-use App\Http\Controllers\President\ConsultationController;
 use App\Http\Controllers\President\GeographicController;
+use App\Http\Controllers\President\ConsultationController;
 use App\Http\Controllers\President\Reports\LandController;
 use App\Http\Controllers\President\Reports\FarmerController as ReportsFarmerController;
+use App\Http\Controllers\Reports\AvailableLandController;
 
 Route::prefix('president')->middleware(['auth:web'])->group(function () {
     Route::resource('users', UserController::class);

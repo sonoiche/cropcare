@@ -28,7 +28,8 @@ class ConsultationController extends Controller
      */
     public function create()
     {
-        //
+        $data['agriculturists'] = User::where('role', 'Agriculturist')->get();
+        return view('agriculturist.consultations.create', $data);
     }
 
     /**
@@ -56,7 +57,7 @@ class ConsultationController extends Controller
                 $consultation->save();
 
                 // send notification
-                $this->sendNotification($president, auth()->user(), "The consultation you submitted is currently under review by one of the Agriculturist.");
+                $this->sendNotification($president, auth()->user(), $consultation);
 
                 break;
 
@@ -70,12 +71,19 @@ class ConsultationController extends Controller
                 $data['president']    = $president = User::find($consultation->president_id);
 
                 // send notification
-                $this->sendNotification($president, auth()->user(), "The consultation you submitted is now Resolve.");
+                $this->sendNotification($president, auth()->user(), $consultation);
 
                 break;
 
             default:
-                # code...
+                
+                $data['consultation'] = $consultation = Consultation::find($id);
+                $president            = User::find($consultation->president_id);
+                // send notification
+                $this->sendNotification($president, auth()->user(), $consultation);
+
+                return view('agriculturist.consultations.show', $data);
+
                 break;
         }
 
@@ -96,7 +104,12 @@ class ConsultationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $consultation = Consultation::find($id);
+        $consultation->status   = $request['status'];
+        $consultation->schedule = $request['schedule'];
+        $consultation->save();
+
+        return redirect()->back();
     }
 
     /**
@@ -107,8 +120,8 @@ class ConsultationController extends Controller
         //
     }
 
-    private function sendNotification($president, $user, $message)
+    private function sendNotification($president, $user, $consultation)
     {
-        Mail::to($president->email)->send(new SendNotificationJobEmail($president, $user, $message));
+        Mail::to($president->email)->send(new SendNotificationJobEmail($president, $user, $consultation));
     }
 }

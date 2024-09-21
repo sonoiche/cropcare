@@ -18,13 +18,13 @@ class SendNotificationJobEmail extends Mailable
      */
     public $president;
     public $user;
-    public $message;
+    public $consultation;
 
-    public function __construct($president, $user, $message)
+    public function __construct($president, $user, $consultation)
     {
-        $this->president    = $president;
-        $this->user         = $user;
-        $this->message      = $message;
+        $this->president        = $president;
+        $this->user             = $user;
+        $this->consultation     = $consultation;
     }
 
     /**

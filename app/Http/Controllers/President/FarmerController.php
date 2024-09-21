@@ -33,8 +33,7 @@ class FarmerController extends Controller
     public function store(FarmerRequest $request)
     {
         $farmer = new FarmMember();
-        $farmer->fname          = $request['fname'];
-        $farmer->lname          = $request['lname'];
+        $farmer->fullname       = $request['fullname'];
         $farmer->contact_number = $request['contact_number'];
         $farmer->association_id = auth()->user()->association_id;
         $farmer->president_id   = auth()->user()->id;

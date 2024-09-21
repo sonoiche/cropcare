@@ -27,15 +27,17 @@
                             <td>{{ $consultation->location ?? '' }}</td>
                             <td>{{ $consultation->status }}</td>
                             <td class="text-center">
-                                <div class="btn-group">
+                                {{-- <div class="btn-group">
                                     <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action
                                     </button>
                                     <div class="dropdown-menu" style="">
+                                        <a class="dropdown-item text-black-50" href="{{ url('agriculturist/consultations', $consultation->id) }}?status=View">View</a>
                                         <a class="dropdown-item text-black-50" onclick="changeStatus({{ $consultation->id }}, 'Review')">Review</a>
                                         <a class="dropdown-item text-black-50" onclick="changeStatus({{ $consultation->id }}, 'Resolved')">Resolved</a>
                                     </div>
-                                </div>
+                                </div> --}}
+                                <a class="btn btn-primary" href="{{ url('agriculturist/consultations', $consultation->id) }}?status=View">View Details</a>
                             </td>
                         </tr>
                         @empty

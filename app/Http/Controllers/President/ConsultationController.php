@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\President;
 
-use App\DataTables\ConsultationDataTable;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\President\ConsultationRequest;
-use App\Models\Consultation;
-use App\Models\FarmMember;
+use App\Models\User;
 use App\Models\LandCrop;
+use App\Models\FarmMember;
+use App\Models\Consultation;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\DataTables\ConsultationDataTable;
+use App\Http\Requests\President\ConsultationRequest;
 
 class ConsultationController extends Controller
 {
@@ -26,7 +27,8 @@ class ConsultationController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $data['farmers']    = FarmMember::where('association_id', $user->association_id)->orderBy('fullname')->get();
+        $data['farmers']        = FarmMember::where('association_id', $user->association_id)->orderBy('fullname')->get();
+        $data['agriculturists'] = User::where('role', 'Agriculturist')->get();
         return view('president.consultations.create', $data);
     }
 
@@ -41,6 +43,7 @@ class ConsultationController extends Controller
         $consultation->location         = $request['location'];
         $consultation->concern          = $request['concern'];
         $consultation->president_id     = auth()->user()->id;
+        // $consultation->agriculture_id   = $request['agriculture_id'];
         $consultation->status           = 'Submitted';
         $consultation->save();
 
@@ -62,6 +65,7 @@ class ConsultationController extends Controller
     {
         $user = auth()->user();
         $data['farmers']        = FarmMember::where('association_id', $user->association_id)->orderBy('fullname')->get();
+        $data['agriculturists'] = User::where('role', 'Agriculturist')->get();
         $data['consultation']   = Consultation::find($id);
         return view('president.consultations.edit', $data);
     }

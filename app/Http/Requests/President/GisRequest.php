@@ -25,7 +25,9 @@ class GisRequest extends FormRequest
             'fullname'      => 'required',
             'name'          => 'required',
             'description'   => 'required',
-            'location'      => 'required'
+            'location'      => 'required',
+            'latitude'      => 'required|regex:/^[0-9\.]+$/',
+            'longitude'     => 'required|regex:/^[0-9\.]+$/'
         ];
     }
 

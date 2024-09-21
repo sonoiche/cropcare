@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Consultation;
+use App\Models\FarmMember;
+use App\Models\Geographic;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -33,6 +36,12 @@ class HomeController extends Controller
                 ->limit(5)
                 ->get();
         }
+        
+        $data['userCount']      = User::where('status', 'Active')->count();
+        $data['farmerCount']    = FarmMember::count();
+        $data['availableLands'] = Geographic::where('status', 'Available')->count();
+        $data['ownedLands']     = Geographic::where('status', 'Owned')->count();
+        $data['consultationCount'] = Consultation::where('status', '!=', 'Resolve')->count();
 
         return view('home', $data);
     }

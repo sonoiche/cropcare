@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('consultations', function (Blueprint $table) {
             $table->id();
             $table->integer('president_id');
+            $table->integer('agriculture_id')->nullable();
             $table->string('farmer_fullname');
             $table->string('title')->nullable();
             $table->text('concern')->nullable();
             $table->string('location')->nullable();
             $table->enum('status', ['Submitted', 'Under Review', 'Resolve'])->nullable();
+            $table->date('schedule')->nullable();
             $table->timestamps();
         });
     }

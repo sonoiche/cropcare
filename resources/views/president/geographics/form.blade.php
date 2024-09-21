@@ -46,6 +46,24 @@
         <label class="form-label">Crop Yield</label>
         <input type="number" name="crop_yield" class="form-control" placeholder="Crop Yield" value="{{ $gis->crop_yield ?? '' }}" />
     </div>
+    <div class="col-md-6">
+        <label class="form-label">Status</label>
+        <select name="status" id="status" class="form-select">
+            <option value="">Select Status</option>
+            <option value="Available" {{ (isset($gis->status) && $gis->status == 'Available') ? 'selected' : '' }}>Available</option>
+            <option value="Owned" {{ (isset($gis->status) && $gis->status == 'Owned') ? 'selected' : '' }}>Owned</option>
+        </select>
+    </div>
+</div>
+<div class="mb-3">
+    <label class="form-label">Photo</label>
+    @if (isset($gis->photo))
+    <div>
+        
+    </div>
+    @else
+    <input type="file" name="photo" id="photo" class="form-control" />
+    @endif
 </div>
 <div class="mb-3">
     <label class="form-label">Remarks</label>

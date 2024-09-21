@@ -30,7 +30,7 @@
                         </tr>
                         <tr>
                             <td style="font-weight: bold">Location</td>
-                            <td>{{ $gis->land->location ?? '' }}</td>
+                            <td>{{ $gis->location ?? '' }}</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold">Latitude</td>
@@ -40,14 +40,14 @@
                             <td style="font-weight: bold">Longitude</td>
                             <td>{{ $gis->longitude }}</td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td style="font-weight: bold">Elevation</td>
                             <td>{{ $gis->elevation }}</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold">Usage</td>
                             <td>{{ $gis->usage }}</td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td style="font-weight: bold">Remarks</td>
                             <td>{{ $gis->remarks }}</td>
@@ -60,5 +60,55 @@
             </div>
         </div>        
     </div>
+    <div class="col-6">
+        <div id="map" style="height: 500px;"></div>
+    </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_api_key') }}&callback=initMap" async defer></script>
+<script>
+function initMap() {
+    var latitude = {{ $gis->latitude }};
+    var longitude = {{ $gis->longitude }};
+    var location = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: location,
+        zoom: 15
+    });
+
+    var marker = new google.maps.Marker({
+        map: map,
+        position: location
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: ''
+    });
+
+    google.maps.event.addListener(marker, 'mouseover', function() {
+        // Set the content of the InfoWindow
+        infowindow.setContent('<div>' +
+            '<h5>{{ $gis->location }}</h5>' +
+            '<img src="{{ $gis->photo ?? '' }}" width="100%" height="100">' +
+            '</div>');
+        infowindow.open(map, marker);
+    });
+
+    google.maps.event.addListener(marker, 'mouseout', function() {
+        infowindow.close();
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+        // Set the content of the InfoWindow
+        infowindow.setContent('<div>' +
+            '<h5>{{ $gis->location }}</h5>' +
+            '<img src="{{ $gis->photo ?? '' }}" width="100%" height="100">' +
+            '</div>');
+        infowindow.open(map, marker);
+    });
+}
+</script>
+@endpush

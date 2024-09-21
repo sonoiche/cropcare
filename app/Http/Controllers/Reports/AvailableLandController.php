@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\President\Reports;
+namespace App\Http\Controllers\Reports;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\DataTables\LandCropDataTable;
-use App\Models\User;
+use App\DataTables\Reports\AvailableLandDataTable;
 
-class LandController extends Controller
+class AvailableLandController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(LandCropDataTable $dataTable, Request $request)
+    public function index(AvailableLandDataTable $dataTable, Request $request)
     {
         $daterange              = $data['daterange'] = $request['daterange'] ?? Carbon::now()->subDays(29)->format('m/d/Y') . ' - ' . now()->format('m/d/Y');
         $date                   = explode('-', $daterange);
@@ -21,9 +21,9 @@ class LandController extends Controller
         $data['to']             = trim($date[1]);
         $data['presidents']     = User::where('role', 'President')->where('status', 'Active')->orderBy('fname')->get();
         $data['president_id']   = $president_id = $request['president_id'];
-
+        
         return $dataTable->with('daterange', $daterange)
-            ->with('president_id', $president_id)->render('president.reports.lands.index', $data);
+            ->with('president_id', $president_id)->render('agriculturist.reports.available.index', $data);
     }
 
     /**

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\DataTables;
+namespace App\DataTables\Reports;
 
-use App\Models\Geographic;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use App\Models\Geographic;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class LandCropDataTable extends DataTable
+class AvailableLandDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,10 +23,12 @@ class LandCropDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->editColumn('created_at', function (Geographic $land) {
-                return $land->created_at->format('F d, Y');
+            ->editColumn('created_at', function (Geographic $geographic) {
+                return $geographic->created_at->format('F d, Y');
             })
-            ->setTotalRecords(-1)
+            ->editColumn('president_name', function (Geographic $geographic) {
+                return $geographic->president->fullname ?? '';
+            })
             ->setRowId('id');
     }
 
@@ -56,11 +58,11 @@ class LandCropDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('landcrop-table')
+            ->setTableId('availableland-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrt')
-            ->orderBy(0)
+            ->dom('Bfrtip')
+            // ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -76,12 +78,15 @@ class LandCropDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make(['data' => 'created_at', 'title' => 'Date']),
-            Column::make(['data' => 'name', 'title' => 'Association']),
+            Column::make(['data' => 'created_at', 'title' => 'Date Added']),
+            Column::make(['data' => 'name', 'title' => 'Feature Name']),
             Column::make(['data' => 'location', 'title' => 'Location']),
-            Column::make(['data' => 'crop_name', 'title' => 'Crop Name']),
+            Column::make(['data' => 'crop_name', 'title' => 'Crops']),
             Column::make(['data' => 'crop_count', 'title' => 'Crop Count']),
-            Column::make(['data' => 'crop_yield', 'title' => 'Crop Yield']),
+            Column::make(['data' => 'crop_yield', 'title' => 'Total Crop Yield']),
+            Column::make(['data' => 'president_name', 'title' => 'President'])
+                ->searchable(false)
+                ->orderable(false)
         ];
     }
 
@@ -90,6 +95,6 @@ class LandCropDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'LandCrop_' . date('YmdHis');
+        return 'AvailableLand_' . date('YmdHis');
     }
 }

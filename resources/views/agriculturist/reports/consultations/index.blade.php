@@ -5,24 +5,15 @@
         <div class="card flex-fill">
             <div class="card-header d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0">Land Report</h5>
+                    <h5 class="card-title mb-0">Consultations</h5>
                 </div>
-                <div style="width: 50%">
-                    <form action="{{ url('president/reports/lands') }}" method="get" class="d-flex justify-cotent-end">
-                        <div class="input-group mb-3" style="width: 40%; margin-right: 10px">
-                            <span class="input-group-text">
-                                <i class="fa fa-calendar" id="date-icon"></i>
-                            </span>
-                            <input type="text" class="form-control" id="daterange" name="daterange" placeholder="Date" value="{{ $daterange ?? '' }}" />
-                        </div>
-                        <div style="width: 25%">
-                            <select name="president_id" id="president_id" class="form-select">
-                                <option value="">All President</option>
-                                @foreach ($presidents as $president)
-                                <option value="{{ $president->id }}" {{ (isset($_GET['president_id']) && $_GET['president_id'] == $president->id) ? 'selected' : '' }}>{{ $president->fullname }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                <div style="width: 30%">
+                    <form action="{{ url('agriculturist/reports/report-consultations') }}" method="get" class="d-flex justify-cotent-end">
+                        <select name="type" id="type" class="form-select">
+                            <option value="">All Consultations</option>
+                            <option value="past" {{ (isset($_GET['type']) && $_GET['type'] == 'past') ? 'selected' : '' }}>Past Consultations</option>
+                            <option value="upcoming" {{ (isset($_GET['type']) && $_GET['type'] == 'upcoming') ? 'selected' : '' }}>Upcoming Consultations</option>
+                        </select>
                         <div style="width: 250px; margin-left: 10px">
                             <button class="btn btn-primary">Generate Report</button>
                         </div>

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\President;
 
-use App\DataTables\GeographicDataTable;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\President\GisRequest;
-use App\Models\Consultation;
 use App\Models\FarmMember;
 use App\Models\Geographic;
+use App\Models\Consultation;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\DataTables\GeographicDataTable;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\President\GisRequest;
 
 class GeographicController extends Controller
 {
@@ -63,6 +64,22 @@ class GeographicController extends Controller
         $gis->crop_name         = $request['crop_name'];
         $gis->crop_count        = $request['crop_count'];
         $gis->crop_yield        = $request['crop_yield'];
+        $gis->status            = $request['status'];
+
+        if(isset($request['photo']) && $request->has('photo')) {
+            $file  = $request->file('photo');
+            $photo = time().'.'.$file->getClientOriginalExtension();
+
+            Storage::putFileAs(
+                'public/uploads/gis',
+                $file,
+                $photo,
+                'public'
+            );
+            
+            $gis->photo = url('storage/uploads/gis/' . $photo);
+        }
+
         $gis->save();
 
         return redirect()->to('president/geographics')->with('success', 'GIS has been added.');
@@ -104,6 +121,22 @@ class GeographicController extends Controller
         $gis->crop_name         = $request['crop_name'];
         $gis->crop_count        = $request['crop_count'];
         $gis->crop_yield        = $request['crop_yield'];
+        $gis->status            = $request['status'];
+
+        if(isset($request['photo']) && $request->has('photo')) {
+            $file  = $request->file('photo');
+            $photo = time().'.'.$file->getClientOriginalExtension();
+
+            Storage::putFileAs(
+                'public/uploads/gis',
+                $file,
+                $photo,
+                'public'
+            );
+            
+            $gis->photo = url('storage/uploads/gis/' . $photo);
+        }
+        
         $gis->save();
 
         return redirect()->to('president/geographics')->with('success', 'GIS has been updated.');

@@ -14,3 +14,12 @@
     <label class="form-label">Concern / Letter</label>
     <textarea name="concern" id="concern" class="w-100 form-control" rows="8" style="resize: none">{{ $consultation->concern ?? '' }}</textarea>
 </div>
+{{-- <div class="mb-3">
+    <label class="form-label">Send To</label>
+    <select name="agriculture_id" id="agriculture_id" class="form-select">
+        <option value="">Select Agriculturist</option>
+        @foreach ($agriculturists as $user)
+        <option value="{{ $user->id }}" {{ (isset($consultation->agriculture_id) && $consultation->agriculture_id == $user->id) ? 'selected' : '' }}>{{ $user->fullname }}</option>
+        @endforeach
+    </select>
+</div> --}}

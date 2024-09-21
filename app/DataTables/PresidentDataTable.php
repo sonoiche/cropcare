@@ -38,7 +38,7 @@ class PresidentDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->join('associations','associations.id','=','users.association_id')
+        return $model->leftJoin('associations','associations.id','=','users.association_id')
             ->select('associations.name', 'associations.id as association_id', 'users.*')
             ->where('role', User::ROLE_PRESIDENT);
     }

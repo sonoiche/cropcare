@@ -1,10 +1,10 @@
-@extends('layouts.app', ['page_title' => 'Manage Presidents'])
+@extends('layouts.app', ['page_title' => 'Manage Users'])
 @section('content')
 <div class="row">
     <div class="col-12 d-flex">
         <div class="card flex-fill">
             <div class="card-header">
-                <h5 class="card-title mb-0">List of Presidents</h5>
+                <h5 class="card-title mb-0">List of Users</h5>
             </div>
             <div class="card-body">
                 <div class="tab tab-success">

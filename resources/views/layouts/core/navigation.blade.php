@@ -143,11 +143,11 @@
                 </a>
 
                 <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                    <img src="{{ url('assets/img/avatars/avatar.jpg') }}" class="avatar img-fluid rounded me-1" alt="{{ auth()->user()->fname }}" /> <span class="text-dark">{{ auth()->user()->fname }}</span>
+                    <img src="{{ auth()->user()->display_photo }}" class="avatar img-fluid rounded me-1" alt="{{ auth()->user()->fname }}" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{ url(strtolower(auth()->user()->role) . '/users', auth()->user()->id) }}/edit">
-                        <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
+                        <i class="align-middle me-1" data-feather="settings"></i> Settings
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log out</a>

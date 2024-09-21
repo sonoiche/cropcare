@@ -19,7 +19,7 @@ class User extends Authenticatable
     protected $guarded = [];
 
     CONST ROLE_AGRICULTURIST = "Agriculturist";
-    CONST ROLE_PRESIDENT = "ROLE_PRESIDENT";
+    CONST ROLE_PRESIDENT = "President";
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,7 +44,7 @@ class User extends Authenticatable
         ];
     }
 
-    protected $appends = ['fullname'];
+    protected $appends = ['fullname','display_photo'];
 
     public function getFullnameAttribute()
     {
@@ -56,5 +56,16 @@ class User extends Authenticatable
         }
 
         return '';
+    }
+
+    public function getDisplayPhotoAttribute()
+    {
+        $photo = $this->attributes['photo'] ?? '';
+        if ($photo) {
+            return url($photo);
+        }
+
+        $name = str_replace(" ", "+", $this->fullname);
+        return 'https://ui-avatars.com/api/?name=' . $name . '&background=random';
     }
 }

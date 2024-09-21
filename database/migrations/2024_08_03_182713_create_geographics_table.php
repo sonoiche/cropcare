@@ -21,10 +21,15 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+            $table->string('location')->nullable();
             $table->text('remarks')->nullable();
+            $table->text('consultation')->nullable();
             $table->string('crop_name')->nullable();
             $table->bigInteger('crop_count')->nullable();
             $table->bigInteger('crop_yield')->nullable();
+            $table->enum('status', ['Available','Owned'])->nullable();
+            $table->enum('consultaion_status', ['Pending','Resolved'])->nullable();
+            $table->string('photo')->nullable();
             $table->timestamps();
         });
     }

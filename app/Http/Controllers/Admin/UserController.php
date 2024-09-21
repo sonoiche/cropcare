@@ -73,4 +73,12 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'User has been updated successfully.');
     }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+
+        return response()->json(200);
+    }
 }
