@@ -38,11 +38,17 @@ class GeographicDataTable extends DataTable
     public function query(Geographic $model): QueryBuilder
     {
         $role = auth()->user()->role;
-        return $model->with('president')
+        $president_id = $this->president_id;
+        return $model->join('farm_members','farm_members.id','=','geographics.farmer_id')
+            ->select('geographics.*','farm_members.fname','farm_members.mname','farm_members.lname','farm_members.suffix')
+            ->with('president')
             ->when($role, function ($query, $role) {
                 if ($role == 'President') {
                     $query->where('president_id', auth()->user()->id);
                 }
+            })
+            ->when($president_id, function ($query, $president_id) {
+                return $query->where('president_id', $president_id);
             });
     }
 
@@ -73,7 +79,7 @@ class GeographicDataTable extends DataTable
     {
         return [
             Column::make(['data' => 'created_at', 'title' => 'Date Added']),
-            Column::make(['data' => 'name', 'title' => 'Feature Name']),
+            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name']),
             Column::make(['data' => 'location', 'title' => 'Location']),
             Column::make(['data' => 'crop_name', 'title' => 'Crops']),
             Column::make(['data' => 'crop_count', 'title' => 'Crop Count']),

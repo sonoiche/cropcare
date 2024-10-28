@@ -6,16 +6,17 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ladumor/laravel-pwa": "^0.0.4",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
         "league/flysystem-aws-s3-v3": "^3.27",
         "maatwebsite/excel": "^3.1",
         "proengsoft/laravel-jsvalidation": "^4.9",
+        "stevebauman/location": "^7.3",
         "yajra/laravel-datatables-buttons": "^11.0",
         "yajra/laravel-datatables-html": "^11.2",
-        "yajra/laravel-datatables-oracle": "^11.1",
-        "ladumor/laravel-pwa": "^0.0.4"
+        "yajra/laravel-datatables-oracle": "^11.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",

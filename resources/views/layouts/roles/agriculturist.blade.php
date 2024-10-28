@@ -34,7 +34,7 @@
                 </a>
                 <ul id="reports-land" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ url('agriculturist/reports/available-lands') }}">Available Lands</a>
+                        <a class="sidebar-link" href="{{ url('agriculturist/reports/available-lands') }}">Farm Lands</a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ url('agriculturist/reports/report-consultations') }}">Consultations</a>

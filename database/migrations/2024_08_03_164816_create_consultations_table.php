@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('concern')->nullable();
             $table->string('location')->nullable();
             $table->enum('status', ['Submitted', 'Under Review', 'Resolve'])->nullable();
-            $table->date('schedule')->nullable();
+            $table->dateTime('schedule')->nullable();
             $table->timestamps();
         });
     }

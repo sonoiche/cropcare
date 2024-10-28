@@ -12,7 +12,7 @@ class FarmMember extends Model
 
     protected $table = "farm_members";
     protected $guarded = [];
-    protected $appends = ['created_date', 'display_photo'];
+    protected $appends = ['created_date', 'display_photo','fullname'];
 
     public function getCreatedDateAttribute()
     {
@@ -33,5 +33,19 @@ class FarmMember extends Model
 
         $name = str_replace(" ", "+", $this->fullname);
         return 'https://ui-avatars.com/api/?name=' . $name . '&background=random';
+    }
+    
+    public function getFullnameAttribute()
+    {
+        $fname      = $this->fname;
+        $mname      = $this->mname;
+        $lname      = $this->lname;
+        $suffix     = $this->suffix;
+
+        if($fname && $lname) {
+            return $fname . ' ' .$mname. ' ' .$lname. ' '.$suffix;
+        }
+
+        return '';
     }
 }

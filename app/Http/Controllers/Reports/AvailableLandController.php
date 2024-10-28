@@ -21,9 +21,12 @@ class AvailableLandController extends Controller
         $data['to']             = trim($date[1]);
         $data['presidents']     = User::where('role', 'President')->where('status', 'Active')->orderBy('fname')->get();
         $data['president_id']   = $president_id = $request['president_id'];
+        $status                 = $request['status'];
         
         return $dataTable->with('daterange', $daterange)
-            ->with('president_id', $president_id)->render('agriculturist.reports.available.index', $data);
+            ->with('president_id', $president_id)
+            ->with('status', $status)
+            ->render('agriculturist.reports.available.index', $data);
     }
 
     /**

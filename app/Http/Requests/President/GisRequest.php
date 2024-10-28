@@ -22,8 +22,9 @@ class GisRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fullname'      => 'required',
+            'farmer_id'     => 'required',
             'name'          => 'required',
+            'farm_area'     => 'required',
             'description'   => 'required',
             'location'      => 'required',
             'latitude'      => 'required|regex:/^[0-9\.]+$/',
@@ -34,7 +35,7 @@ class GisRequest extends FormRequest
     public function messages()
     {
         return [
-            'fullname.required'     => 'The farmer\'s name field is required.'
+            'farmer_id.required'     => 'The farmer\'s name field is required.'
         ];
     }
 }

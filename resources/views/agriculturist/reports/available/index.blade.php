@@ -5,22 +5,29 @@
         <div class="card flex-fill">
             <div class="card-header d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0">Available Lands</h5>
+                    <h5 class="card-title mb-0">Farm Lands</h5>
                 </div>
-                <div style="width: 50%">
-                    <form action="{{ url('president/reports/available-lands') }}" method="get" class="d-flex justify-cotent-end">
+                <div style="width: 60%">
+                    <form action="{{ url('agriculturist/reports/available-lands') }}" method="get" class="d-flex justify-cotent-end">
                         <div class="input-group mb-3" style="width: 40%; margin-right: 10px">
                             <span class="input-group-text">
                                 <i class="fa fa-calendar" id="date-icon"></i>
                             </span>
                             <input type="text" class="form-control" id="daterange" name="daterange" placeholder="Date" value="{{ $daterange ?? '' }}" />
                         </div>
-                        <div style="width: 25%">
+                        <div style="width: 25%; margin-right: 10px">
                             <select name="president_id" id="president_id" class="form-select">
                                 <option value="">All President</option>
                                 @foreach ($presidents as $president)
                                 <option value="{{ $president->id }}" {{ (isset($_GET['president_id']) && $_GET['president_id'] == $president->id) ? 'selected' : '' }}>{{ $president->fullname }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div style="width: 20%">
+                            <select name="status" id="status" class="form-select">
+                                <option value="">All Status</option>
+                                <option value="Tenant" {{ (isset($_GET['status']) && $_GET['status'] == 'Tenant') ? 'selected' : '' }}>Tenant</option>
+                                <option value="Owned" {{ (isset($_GET['status']) && $_GET['status'] == 'Owned') ? 'selected' : '' }}>Owned</option>
                             </select>
                         </div>
                         <div style="width: 250px; margin-left: 10px">

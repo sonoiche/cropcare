@@ -29,6 +29,9 @@ class AvailableLandDataTable extends DataTable
             ->editColumn('president_name', function (Geographic $geographic) {
                 return $geographic->president->fullname ?? '';
             })
+            ->editColumn('fname', function (Geographic $geographic) {
+                return $geographic->fullname ?? '';
+            })
             ->setRowId('id');
     }
 
@@ -39,8 +42,10 @@ class AvailableLandDataTable extends DataTable
     {
         $daterange      = $this->daterange;
         $president_id   = $this->president_id;
+        $status         = $this->status;
         return $model->leftJoin('associations', 'associations.id', '=', 'geographics.association_id')
-            ->select('geographics.*', 'associations.name')
+            ->join('farm_members','farm_members.id','=','geographics.farmer_id')
+            ->select('geographics.*', 'associations.name','farm_members.fname','farm_members.mname','farm_members.lname','farm_members.suffix')
             ->when($daterange, function ($query, $daterange) {
                 $date = explode('-', $daterange);
                 $from = Carbon::parse($date[0])->format('Y-m-d');
@@ -49,6 +54,9 @@ class AvailableLandDataTable extends DataTable
             })
             ->when($president_id, function ($query, $president_id) {
                 return $query->where('geographics.president_id', $president_id);
+            })
+            ->when($status, function ($query, $status) {
+                return $query->where('geographics.status', $status);
             });
     }
 
@@ -79,7 +87,8 @@ class AvailableLandDataTable extends DataTable
     {
         return [
             Column::make(['data' => 'created_at', 'title' => 'Date Added']),
-            Column::make(['data' => 'name', 'title' => 'Feature Name']),
+            Column::make(['data' => 'name', 'title' => 'Geographic Name']),
+            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name']),
             Column::make(['data' => 'location', 'title' => 'Location']),
             Column::make(['data' => 'crop_name', 'title' => 'Crops']),
             Column::make(['data' => 'crop_count', 'title' => 'Crop Count']),

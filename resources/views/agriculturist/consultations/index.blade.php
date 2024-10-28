@@ -4,7 +4,19 @@
     <div class="col-12 d-flex">
         <div class="card flex-fill">
             <div class="card-header">
-                <h5 class="card-title mb-0">List of Consultations</h5>
+                <form method="get">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title mb-0">List of Consultations</h5>
+                        <div class="input-group" style="width: 30%">
+                            <select name="status" id="status" class="form-select" style="width: 10%">
+                                <option value="">All Status</option>
+                                <option value="Accepted" {{ (isset($_GET['status']) && $_GET['status'] == 'Accepted') ? 'selected' : '' }}>Accepted</option>
+                                <option value="Resolve" {{ (isset($_GET['status']) && $_GET['status'] == 'Resolve') ? 'selected' : '' }}>Resolve</option>
+                            </select>
+                            <button class="btn btn-primary" type="submit">Generate</button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="card-body">
                 {!! $dataTable->table() !!}

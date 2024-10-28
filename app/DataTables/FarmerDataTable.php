@@ -28,6 +28,9 @@ class FarmerDataTable extends DataTable
             ->editColumn('created_at', function (FarmMember $farmer) {
                 return $farmer->created_at->format('F d, Y');
             })
+            ->editColumn('fname', function (FarmMember $farmer) {
+                return $farmer->fname .' '.$farmer->mname. ' ' .$farmer->lname. ' ' .$farmer->suffix;
+            })
             ->addColumn('action', 'president.farmers.action')
             ->setRowId('id')
             ->rawColumns(['photo', 'action']);
@@ -73,7 +76,7 @@ class FarmerDataTable extends DataTable
                 ->orderable(false)
                 ->addClass('text-center'),
             Column::make(['data' => 'created_at', 'title' => 'Created Date']),
-            Column::make(['data' => 'fullname', 'title' => 'Fullname']),
+            Column::make(['data' => 'fname', 'title' => 'Fullname']),
             Column::make(['data' => 'contact_number', 'title' => 'Contact Number']),
             Column::make(['data' => 'name', 'title' => 'Association']),
             Column::make(['data' => 'barangay', 'title' => 'Barangay']),

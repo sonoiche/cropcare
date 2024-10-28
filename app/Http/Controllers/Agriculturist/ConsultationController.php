@@ -17,10 +17,13 @@ class ConsultationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(ConsultationDataTable $dataTable)
+    public function index(ConsultationDataTable $dataTable, Request $request)
     {
         $role = auth()->user()->role;
-        return $dataTable->with('role', $role)->render('agriculturist.consultations.index');
+        $status = $request['status'];
+        return $dataTable->with('role', $role)
+            ->with('status', $status)
+            ->render('agriculturist.consultations.index');
     }
 
     /**
@@ -109,7 +112,7 @@ class ConsultationController extends Controller
         $consultation->schedule = $request['schedule'];
         $consultation->save();
 
-        return redirect()->back();
+        return redirect()->to('agriculturist/consultations');
     }
 
     /**

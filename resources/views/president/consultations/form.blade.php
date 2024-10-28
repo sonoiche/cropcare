@@ -11,6 +11,10 @@
     <input type="text" name="location" class="form-control" placeholder="Location" value="{{ $consultation->location ?? '' }}" />
 </div>
 <div class="mb-3">
+    <label class="form-label">Photo</label>
+    <input type="file" name="photo" class="form-control" />
+</div>
+<div class="mb-3">
     <label class="form-label">Concern / Letter</label>
     <textarea name="concern" id="concern" class="w-100 form-control" rows="8" style="resize: none">{{ $consultation->concern ?? '' }}</textarea>
 </div>

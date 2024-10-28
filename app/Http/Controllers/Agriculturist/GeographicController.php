@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agriculturist;
 
 use App\DataTables\GeographicDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GeographicController extends Controller
@@ -11,9 +12,13 @@ class GeographicController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(GeographicDataTable $dataTable)
+    public function index(GeographicDataTable $dataTable, Request $request)
     {
-        return $dataTable->render('agriculturist.geographics.index');
+        $data['presidents'] = User::where('role', 'President')->orderBy('fname')->get();
+        $president_id       = $request['president_id'];
+        return $dataTable
+            ->with('president_id', $president_id)
+            ->render('agriculturist.geographics.index', $data);
     }
 
     /**

@@ -25,7 +25,8 @@ class ConsultationRequest extends FormRequest
             'title'             => 'required',
             'farmer_fullname'   => 'required',
             'location'          => 'required',
-            'concern'           => 'required'
+            'concern'           => 'required',
+            'photo'             => 'nullable|sometimes|image'
         ];
     }
 

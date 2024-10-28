@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\DataTables\GeographicDataTable;
 use Illuminate\Support\Facades\Storage;
+use Stevebauman\Location\Facades\Location;
 use App\Http\Requests\President\GisRequest;
 
 class GeographicController extends Controller
@@ -26,9 +27,14 @@ class GeographicController extends Controller
      */
     public function create(Request $request)
     {
+        $ip_address = $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ? $_SERVER['REMOTE_ADDR'] : '49.150.78.124';
+
+        // Get location data based on the IP address
+        $data['location']       = Location::get($ip_address);
         $consultation_id        = $request['consultation_id'];
         $consultation           = Consultation::find($consultation_id);
         $data['consultation']   = $consultation;
+        $data['farmers']        = FarmMember::where('president_id', auth()->user()->id)->orderBy('fname')->get();
 
         if (isset($consultation_id)) {
             $gis = Geographic::where('consultation_id', $consultation_id)->first();
@@ -55,6 +61,7 @@ class GeographicController extends Controller
         $gis->farmer_id         = $farmer->id;
         $gis->consultation_id   = $request['consultation_id'];
         $gis->location          = $request['location'];
+        $gis->farm_area         = $request['farm_area'];
         $gis->name              = $request['name'];
         $gis->description       = $request['description'];
         $gis->consultation      = $request['consultation'];
@@ -70,14 +77,13 @@ class GeographicController extends Controller
             $file  = $request->file('photo');
             $photo = time().'.'.$file->getClientOriginalExtension();
 
-            Storage::putFileAs(
-                'public/uploads/gis',
-                $file,
-                $photo,
+            Storage::disk('s3')->put(
+                'cropcare/uploads/gis/' . $photo,
+                file_get_contents($file),
                 'public'
             );
             
-            $gis->photo = url('storage/uploads/gis/' . $photo);
+            $gis->photo = Storage::disk('s3')->url('cropcare/uploads/gis/' . $photo);
         }
 
         $gis->save();
@@ -100,8 +106,9 @@ class GeographicController extends Controller
      */
     public function edit(string $id)
     {
-        $data['gis'] = $gis = Geographic::find($id);
-        $data['farmer'] = FarmMember::find($gis->farmer_id);
+        $data['gis']        = $gis = Geographic::find($id);
+        $data['farmer']     = FarmMember::find($gis->farmer_id);
+        $data['farmers']    = FarmMember::where('president_id', auth()->user()->id)->orderBy('fname')->get();
         return view('president.geographics.edit', $data);
     }
 
@@ -113,6 +120,7 @@ class GeographicController extends Controller
         $gis = Geographic::find($id);
         $gis->location          = $request['location'];
         $gis->name              = $request['name'];
+        $gis->farm_area         = $request['farm_area'];
         $gis->description       = $request['description'];
         $gis->consultation      = $request['consultation'];
         $gis->remarks           = $request['remarks'];
@@ -127,14 +135,13 @@ class GeographicController extends Controller
             $file  = $request->file('photo');
             $photo = time().'.'.$file->getClientOriginalExtension();
 
-            Storage::putFileAs(
-                'public/uploads/gis',
-                $file,
-                $photo,
+            Storage::disk('s3')->put(
+                'cropcare/uploads/gis/' . $photo,
+                file_get_contents($file),
                 'public'
             );
             
-            $gis->photo = url('storage/uploads/gis/' . $photo);
+            $gis->photo = Storage::disk('s3')->url('cropcare/uploads/gis/' . $photo);
         }
         
         $gis->save();

@@ -33,7 +33,10 @@ class FarmerController extends Controller
     public function store(FarmerRequest $request)
     {
         $farmer = new FarmMember();
-        $farmer->fullname       = $request['fullname'];
+        $farmer->fname          = $request['fname'];
+        $farmer->mname          = $request['mname'];
+        $farmer->lname          = $request['lname'];
+        $farmer->suffix_name    = $request['suffix_name'];
         $farmer->contact_number = $request['contact_number'];
         $farmer->association_id = auth()->user()->association_id;
         $farmer->president_id   = auth()->user()->id;
@@ -43,14 +46,13 @@ class FarmerController extends Controller
             $file  = $request->file('photo');
             $photo = time().'.'.$file->getClientOriginalExtension();
 
-            Storage::putFileAs(
-                'public/uploads/farmers',
-                $file,
-                $photo,
+            Storage::disk('s3')->put(
+                'cropcare/uploads/farmers/' . $photo,
+                file_get_contents($file),
                 'public'
             );
             
-            $farmer->photo = url('storage/uploads/farmers/' . $photo);
+            $farmer->photo = Storage::disk('s3')->url('cropcare/uploads/farmers/' . $photo);
         }
 
         $farmer->save();
@@ -82,7 +84,9 @@ class FarmerController extends Controller
     {
         $farmer = FarmMember::find($id);
         $farmer->fname          = $request['fname'];
+        $farmer->mname          = $request['mname'];
         $farmer->lname          = $request['lname'];
+        $farmer->suffix         = $request['suffix_name'];
         $farmer->contact_number = $request['contact_number'];
         $farmer->barangay       = $request['barangay'];
 
@@ -90,14 +94,13 @@ class FarmerController extends Controller
             $file  = $request->file('photo');
             $photo = time().'.'.$file->getClientOriginalExtension();
 
-            Storage::putFileAs(
-                'public/uploads/farmers',
-                $file,
-                $photo,
+            Storage::disk('s3')->put(
+                'cropcare/uploads/farmers/' . $photo,
+                file_get_contents($file),
                 'public'
             );
             
-            $farmer->photo = url('storage/uploads/farmers/' . $photo);
+            $farmer->photo = Storage::disk('s3')->url('cropcare/uploads/farmers/' . $photo);
         }
 
         $farmer->save();

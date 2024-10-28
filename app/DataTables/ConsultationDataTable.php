@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Consultation;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -25,13 +26,27 @@ class ConsultationDataTable extends DataTable
             ->editColumn('fname', function (Consultation $consultation) {
                 return $consultation->fname . ' ' . $consultation->lname;
             })
+            ->editColumn('pres_name', function (Consultation $consultation) {
+                return $consultation->president->fullname ?? '';
+            })
             ->editColumn('created_at', function (Consultation $consultation) {
                 return $consultation->created_at->format('F d, Y');
+            })
+            ->editColumn('schedule', function (Consultation $consultation) {
+                return Carbon::parse($consultation->schedule)->format('F d, Y h:i A');
+            })
+            ->editColumn('status', function (Consultation $consultation) {
+                $html  = '<div class="text-center">'.$consultation->status.'</div>';
+                if($consultation->status == 'Accepted') {
+                    $html .= '<div style="font-size: 12px; text-align: center">'.Carbon::parse($consultation->schedule)->format('F d, Y h:i A').'</div>';
+                }
+                return $html;
             })
             ->addColumn('action', function (Consultation $consultation) {
                 return view('president.consultations.action', compact('consultation'));
             })
-            ->setRowId('id');
+            ->setRowId('id')
+            ->rawColumns(['status','action']);
     }
 
     /**
@@ -40,10 +55,14 @@ class ConsultationDataTable extends DataTable
     public function query(Consultation $model): QueryBuilder
     {
         $role = $this->role;
+        $status = $this->status;
         return $model->when($role, function ($query, $role) {
             if ($role === 'President') {
                 return $query->where('consultations.president_id', auth()->user()->id);
             }
+        })
+        ->when($status, function ($query, $status) {
+            return $query->where('status', $status);
         });
     }
 
@@ -57,7 +76,7 @@ class ConsultationDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy(0,'asc')
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -76,6 +95,7 @@ class ConsultationDataTable extends DataTable
             return [
                 Column::make(['data' => 'created_at', 'title' => 'Created Date']),
                 Column::make(['data' => 'title']),
+                Column::make(['data' => 'pres_name', 'title' => 'President']),
                 Column::make(['data' => 'farmer_fullname', 'title' => 'Farmer Name']),
                 Column::make(['data' => 'location']),
                 Column::make(['data' => 'status']),

@@ -8,6 +8,7 @@ use App\Models\FarmMember;
 use App\Models\Consultation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\DataTables\ConsultationDataTable;
 use App\Http\Requests\President\ConsultationRequest;
 
@@ -16,9 +17,10 @@ class ConsultationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(ConsultationDataTable $dataTable)
+    public function index(ConsultationDataTable $dataTable, Request $request)
     {
-        return $dataTable->render('president.consultations.index');
+        $status = $request['status'];
+        return $dataTable->with('status', $status)->render('president.consultations.index');
     }
 
     /**
@@ -43,8 +45,21 @@ class ConsultationController extends Controller
         $consultation->location         = $request['location'];
         $consultation->concern          = $request['concern'];
         $consultation->president_id     = auth()->user()->id;
-        // $consultation->agriculture_id   = $request['agriculture_id'];
         $consultation->status           = 'Submitted';
+
+        if(isset($request['photo']) && $request->has('photo')) {
+            $file  = $request->file('photo');
+            $photo = time().'.'.$file->getClientOriginalExtension();
+
+            Storage::disk('s3')->put(
+                'cropcare/uploads/consultations/' . $photo,
+                file_get_contents($file),
+                'public'
+            );
+            
+            $consultation->photo = Storage::disk('s3')->url('cropcare/uploads/consultations/' . $photo);
+        }
+
         $consultation->save();
 
         return redirect()->to('president/consultations')->with('success', 'Submitting consultation is success.');
@@ -78,8 +93,22 @@ class ConsultationController extends Controller
         $consultation = Consultation::find($id);
         $consultation->farmer_id    = $request['farmer_id'];
         $consultation->title        = $request['title'];
-        $consultation->location_id  = $request['location_id'];
+        $consultation->location     = $request['location'];
         $consultation->concern      = $request['concern'];
+
+        if(isset($request['photo']) && $request->has('photo')) {
+            $file  = $request->file('photo');
+            $photo = time().'.'.$file->getClientOriginalExtension();
+
+            Storage::disk('s3')->put(
+                'cropcare/uploads/consultations/' . $photo,
+                file_get_contents($file),
+                'public'
+            );
+            
+            $consultation->photo = Storage::disk('s3')->url('cropcare/uploads/consultations/' . $photo);
+        }
+
         $consultation->save();
 
         return redirect()->back()->with('success', 'Consultation has been updated.');
