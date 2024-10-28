@@ -44,11 +44,11 @@ class GeographicDataTable extends DataTable
             ->with('president')
             ->when($role, function ($query, $role) {
                 if ($role == 'President') {
-                    $query->where('president_id', auth()->user()->id);
+                    $query->where('geographics.president_id', auth()->user()->id);
                 }
             })
             ->when($president_id, function ($query, $president_id) {
-                return $query->where('president_id', $president_id);
+                return $query->where('geographics.president_id', $president_id);
             });
     }
 
