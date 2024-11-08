@@ -2,15 +2,16 @@
 
 namespace App\DataTables\Reports;
 
+use Carbon\Carbon;
 use App\Models\FarmMember;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class FarmerDataTable extends DataTable
 {
@@ -26,7 +27,7 @@ class FarmerDataTable extends DataTable
                 return $farmer->created_at->format('F d, Y');
             })
             ->editColumn('fname', function (FarmMember $farmer) {
-                return $farmer->fullname;
+                return $farmer->fname . ' '.$farmer->mname.' ' . $farmer->lname . ' ' . $farmer->suffix;
             })
             ->setTotalRecords(-1)
             ->setRowId('id');
@@ -37,7 +38,14 @@ class FarmerDataTable extends DataTable
      */
     public function query(FarmMember $model): QueryBuilder
     {
-        return $model->newQuery();
+        $daterange      = $this->daterange;
+        return $model->where('president_id', auth()->user()->id)
+            ->when($daterange, function ($query, $daterange) {
+                $date = explode('-', $daterange);
+                $from = Carbon::parse($date[0])->format('Y-m-d');
+                $to   = Carbon::parse($date[1])->format('Y-m-d');
+                return $query->whereRaw("date(created_at) between ? and ?", [$from, $to]);
+            });
     }
 
     /**

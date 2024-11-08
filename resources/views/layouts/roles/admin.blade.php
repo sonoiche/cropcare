@@ -33,7 +33,7 @@
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ url('admin/listings') }}">
                     <i class="align-middle" data-feather="map"></i>
-                    <span class="align-middle">Manage Farmlands</span>
+                    <span class="align-middle">GIS</span>
                 </a>
             </li>
             <li class="sidebar-item">

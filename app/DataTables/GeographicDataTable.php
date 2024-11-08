@@ -25,10 +25,22 @@ class GeographicDataTable extends DataTable
             ->editColumn('created_at', function (Geographic $geographic) {
                 return $geographic->created_at->format('F d, Y');
             })
+            ->editColumn('fname', function (Geographic $geographic) {
+                return $geographic->fullname ?? $geographic->fname;
+            })
             ->editColumn('president_name', function (Geographic $geographic) {
                 return $geographic->president->fullname ?? '';
             })
-            ->addColumn('action', 'president.geographics.action')
+            ->addColumn('action', function(Geographic $geographic) {
+                if(auth()->user()->role == 'President') {
+                    return view('president.geographics.action', compact('geographic'));
+                }
+
+                return view('agriculturist.geographics.action', compact('geographic'));
+            })
+            ->addColumn('', function(Geographic $geographic) {
+
+            })
             ->setRowId('id');
     }
 
@@ -87,11 +99,14 @@ class GeographicDataTable extends DataTable
             Column::make(['data' => 'president_name', 'title' => 'President'])
                 ->searchable(false)
                 ->orderable(false),
-            Column::computed('action')
+            (auth()->user()->role != 'Admin') ? Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(150)
-                ->addClass('text-center'),
+                ->addClass('text-center') :
+                Column::computed('')
+                ->exportable(false)
+                ->printable(false),
         ];
     }
 

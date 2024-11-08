@@ -16,8 +16,8 @@
             <label class="form-label">Geographic Name</label>
             <select name="name" id="geo_name" class="form-select">
                 <option value="">Select Name</option>
-                <option value="Plains" {{ (isset($gis->geo_name) && $gis->geo_name == 'Plains') ? 'selected' : '' }}>Plains</option>
-                <option value="Mountains" {{ (isset($gis->geo_name) && $gis->geo_name == 'Mountains') ? 'selected' : '' }}>Mountains</option>
+                <option value="Plains" {{ (isset($gis->name) && $gis->name == 'Plains') ? 'selected' : '' }}>Plains</option>
+                <option value="Mountains" {{ (isset($gis->name) && $gis->name == 'Mountains') ? 'selected' : '' }}>Mountains</option>
             </select>
         </div>
     </div>

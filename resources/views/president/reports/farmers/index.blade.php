@@ -41,14 +41,11 @@
 $(document).ready(function () {
     var start = moment().subtract(29, 'days');
     var end = moment();
-
     function cb(start, end) {
         // $('#daterange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     }
 
     $('#daterange').daterangepicker({
-        startDate: start,
-        endDate: end,
         ranges: {
            'Today': [moment(), moment()],
            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -59,7 +56,7 @@ $(document).ready(function () {
         }
     }, cb);
 
-    cb(start, end);
+    // cb(start, end);
 });
 </script>
 @endpush

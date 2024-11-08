@@ -26,6 +26,9 @@ class LandCropDataTable extends DataTable
             ->editColumn('created_at', function (Geographic $land) {
                 return $land->created_at->format('F d, Y');
             })
+            ->editColumn('fname', function (Geographic $land) {
+                return $land->fname . ' '.$land->mname.' ' . $land->lname . ' ' . $land->suffix;
+            })
             ->setTotalRecords(-1)
             ->setRowId('id');
     }
@@ -38,7 +41,8 @@ class LandCropDataTable extends DataTable
         $daterange      = $this->daterange;
         $president_id   = $this->president_id;
         return $model->leftJoin('associations', 'associations.id', '=', 'geographics.association_id')
-            ->select('geographics.*', 'associations.name')
+            ->leftJoin('farm_members','farm_members.id','=','geographics.farmer_id')
+            ->select('geographics.*', 'associations.name', 'farm_members.fname','farm_members.lname','farm_members.mname')
             ->when($daterange, function ($query, $daterange) {
                 $date = explode('-', $daterange);
                 $from = Carbon::parse($date[0])->format('Y-m-d');
@@ -77,11 +81,14 @@ class LandCropDataTable extends DataTable
     {
         return [
             Column::make(['data' => 'created_at', 'title' => 'Date']),
+            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name']),
             Column::make(['data' => 'name', 'title' => 'Association']),
             Column::make(['data' => 'location', 'title' => 'Location']),
             Column::make(['data' => 'crop_name', 'title' => 'Crop Name']),
-            Column::make(['data' => 'crop_count', 'title' => 'Crop Count']),
-            Column::make(['data' => 'crop_yield', 'title' => 'Crop Yield']),
+            Column::make(['data' => 'crop_count', 'title' => 'Crop Count'])
+                ->addClass('text-center'),
+            Column::make(['data' => 'crop_yield', 'title' => 'Crop Yield'])
+                ->addClass('text-center'),
         ];
     }
 

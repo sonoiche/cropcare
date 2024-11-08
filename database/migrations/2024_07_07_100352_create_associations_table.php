@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('associations', function (Blueprint $table) {
             $table->id();
+            $table->integer('president_id')->nullable();
             $table->integer('user_id');
             $table->string('name');
             $table->timestamps();

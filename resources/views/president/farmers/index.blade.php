@@ -17,6 +17,17 @@
 @push('scripts')
 {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 <script>
-
+function removeFarmer(id) {
+    if(confirm('Are you sure you want to delete this farmer?')) {
+        $.ajax({
+            type: "DELETE",
+            url: "{{ url('president/farmers') }}/" + id,
+            dataType: "json",
+            success: function (response) {
+                location.reload();
+            }
+        });
+    }
+}
 </script>
 @endpush

@@ -30,16 +30,15 @@ class ConsultationDataTable extends DataTable
                 return $consultation->president->fullname ?? '';
             })
             ->editColumn('created_at', function (Consultation $consultation) {
-                return $consultation->created_at->format('F d, Y');
+                return $consultation->created_at->format('M d, Y');
             })
             ->editColumn('schedule', function (Consultation $consultation) {
-                return Carbon::parse($consultation->schedule)->format('F d, Y h:i A');
+                if(isset($consultation->schedule)) {
+                    return Carbon::parse($consultation->schedule)->format('F d, Y h:i A');
+                }
             })
             ->editColumn('status', function (Consultation $consultation) {
                 $html  = '<div class="text-center">'.$consultation->status.'</div>';
-                if($consultation->status == 'Accepted') {
-                    $html .= '<div style="font-size: 12px; text-align: center">'.Carbon::parse($consultation->schedule)->format('F d, Y h:i A').'</div>';
-                }
                 return $html;
             })
             ->addColumn('action', function (Consultation $consultation) {
@@ -99,6 +98,7 @@ class ConsultationDataTable extends DataTable
                 Column::make(['data' => 'farmer_fullname', 'title' => 'Farmer Name']),
                 Column::make(['data' => 'location']),
                 Column::make(['data' => 'status']),
+                Column::make(['data' => 'schedule']),
                 Column::make(['data' => 'concern', 'title' => 'Cover Letter / Concern'])
                     ->width(250)
             ];
@@ -110,6 +110,7 @@ class ConsultationDataTable extends DataTable
             Column::make(['data' => 'farmer_fullname', 'title' => 'Farmer Name']),
             Column::make(['data' => 'location']),
             Column::make(['data' => 'status']),
+            Column::make(['data' => 'schedule']),
             Column::make(['data' => 'concern', 'title' => 'Cover Letter / Concern'])
                 ->width(200),
             Column::computed('action')

@@ -10,10 +10,10 @@
                 </div>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ url('president/users', $user->id) }}">
+                <form method="POST" action="{{ url('agriculturist/users', $user->id) }}">
                     @csrf
                     @method('PUT')
-                    @include('president.users.form')
+                    @include('agriculturist.users.form')
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                         <input type="hidden" name="id" value="{{ $user->id }}" />

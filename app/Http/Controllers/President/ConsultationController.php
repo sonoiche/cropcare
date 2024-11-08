@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\DataTables\ConsultationDataTable;
+use Stevebauman\Location\Facades\Location;
 use App\Http\Requests\President\ConsultationRequest;
 
 class ConsultationController extends Controller
@@ -29,7 +30,11 @@ class ConsultationController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $data['farmers']        = FarmMember::where('association_id', $user->association_id)->orderBy('fullname')->get();
+        $ip_address = $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ? $_SERVER['REMOTE_ADDR'] : '49.150.78.124';
+
+        // Get location data based on the IP address
+        $data['location']       = Location::get($ip_address);
+        $data['farmers']        = FarmMember::where('association_id', $user->association_id)->orderBy('fname')->get();
         $data['agriculturists'] = User::where('role', 'Agriculturist')->get();
         return view('president.consultations.create', $data);
     }
@@ -46,6 +51,8 @@ class ConsultationController extends Controller
         $consultation->concern          = $request['concern'];
         $consultation->president_id     = auth()->user()->id;
         $consultation->status           = 'Submitted';
+        $consultation->latitude         = $request['latitude'];
+        $consultation->longitude        = $request['longitude'];
 
         if(isset($request['photo']) && $request->has('photo')) {
             $file  = $request->file('photo');
@@ -79,7 +86,11 @@ class ConsultationController extends Controller
     public function edit(string $id)
     {
         $user = auth()->user();
-        $data['farmers']        = FarmMember::where('association_id', $user->association_id)->orderBy('fullname')->get();
+        $ip_address = $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ? $_SERVER['REMOTE_ADDR'] : '49.150.78.124';
+
+        // Get location data based on the IP address
+        $data['location']       = Location::get($ip_address);
+        $data['farmers']        = FarmMember::where('association_id', $user->association_id)->orderBy('fname')->get();
         $data['agriculturists'] = User::where('role', 'Agriculturist')->get();
         $data['consultation']   = Consultation::find($id);
         return view('president.consultations.edit', $data);
@@ -95,6 +106,8 @@ class ConsultationController extends Controller
         $consultation->title        = $request['title'];
         $consultation->location     = $request['location'];
         $consultation->concern      = $request['concern'];
+        $consultation->latitude     = $request['latitude'];
+        $consultation->longitude    = $request['longitude'];
 
         if(isset($request['photo']) && $request->has('photo')) {
             $file  = $request->file('photo');

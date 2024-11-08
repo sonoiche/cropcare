@@ -34,7 +34,11 @@ class GeographicController extends Controller
         $consultation_id        = $request['consultation_id'];
         $consultation           = Consultation::find($consultation_id);
         $data['consultation']   = $consultation;
-        $data['farmers']        = FarmMember::where('president_id', auth()->user()->id)->orderBy('fname')->get();
+        $data['farmers']        = FarmMember::where('president_id', auth()->user()->id)
+            ->whereNotNull('fname')
+            ->whereNotNull('lname')
+            ->orderBy('fname')
+            ->get();
 
         if (isset($consultation_id)) {
             $gis = Geographic::where('consultation_id', $consultation_id)->first();
@@ -106,6 +110,10 @@ class GeographicController extends Controller
      */
     public function edit(string $id)
     {
+        $ip_address = $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ? $_SERVER['REMOTE_ADDR'] : '49.150.78.124';
+
+        // Get location data based on the IP address
+        $data['location']   = Location::get($ip_address);
         $data['gis']        = $gis = Geographic::find($id);
         $data['farmer']     = FarmMember::find($gis->farmer_id);
         $data['farmers']    = FarmMember::where('president_id', auth()->user()->id)->orderBy('fname')->get();

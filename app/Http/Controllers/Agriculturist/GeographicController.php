@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Agriculturist;
 
-use App\DataTables\GeographicDataTable;
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\FarmMember;
+use App\Models\Geographic;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\DataTables\GeographicDataTable;
+use Illuminate\Support\Facades\Storage;
+use Stevebauman\Location\Facades\Location;
 
 class GeographicController extends Controller
 {
@@ -42,7 +46,9 @@ class GeographicController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data['gis'] = Geographic::find($id);
+
+        return view('agriculturist.geographics.show', $data);
     }
 
     /**
@@ -50,7 +56,14 @@ class GeographicController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $ip_address = $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ? $_SERVER['REMOTE_ADDR'] : '49.150.78.124';
+
+        // Get location data based on the IP address
+        $data['location']   = Location::get($ip_address);
+        $data['gis']        = $gis = Geographic::find($id);
+        $data['farmer']     = FarmMember::find($gis->farmer_id);
+        $data['farmers']    = FarmMember::orderBy('fname')->get();
+        return view('agriculturist.geographics.edit', $data);
     }
 
     /**
@@ -58,7 +71,36 @@ class GeographicController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $gis = Geographic::find($id);
+        $gis->location          = $request['location'];
+        $gis->name              = $request['name'];
+        $gis->farm_area         = $request['farm_area'];
+        $gis->description       = $request['description'];
+        $gis->consultation      = $request['consultation'];
+        $gis->remarks           = $request['remarks'];
+        $gis->latitude          = $request['latitude'];
+        $gis->longitude         = $request['longitude'];
+        $gis->crop_name         = $request['crop_name'];
+        $gis->crop_count        = $request['crop_count'];
+        $gis->crop_yield        = $request['crop_yield'];
+        $gis->status            = $request['status'];
+
+        if(isset($request['photo']) && $request->has('photo')) {
+            $file  = $request->file('photo');
+            $photo = time().'.'.$file->getClientOriginalExtension();
+
+            Storage::disk('s3')->put(
+                'cropcare/uploads/gis/' . $photo,
+                file_get_contents($file),
+                'public'
+            );
+            
+            $gis->photo = Storage::disk('s3')->url('cropcare/uploads/gis/' . $photo);
+        }
+        
+        $gis->save();
+
+        return redirect()->to('agriculturist/geographics')->with('success', 'GIS has been updated.');
     }
 
     /**
@@ -66,6 +108,9 @@ class GeographicController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $gis = Geographic::find($id);
+        $gis->delete();
+
+        return response()->json(200);
     }
 }

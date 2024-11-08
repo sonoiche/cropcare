@@ -36,7 +36,7 @@ class FarmerController extends Controller
         $farmer->fname          = $request['fname'];
         $farmer->mname          = $request['mname'];
         $farmer->lname          = $request['lname'];
-        $farmer->suffix_name    = $request['suffix_name'];
+        $farmer->suffix         = $request['suffix_name'];
         $farmer->contact_number = $request['contact_number'];
         $farmer->association_id = auth()->user()->association_id;
         $farmer->president_id   = auth()->user()->id;
@@ -113,6 +113,9 @@ class FarmerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $farmer = FarmMember::find($id);
+        $farmer->delete();
+
+        return response()->json(200);
     }
 }

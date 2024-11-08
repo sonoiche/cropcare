@@ -27,7 +27,7 @@ class ConsultationDataTable extends DataTable
                 return $consultation->fname . ' ' . $consultation->lname;
             })
             ->editColumn('schedule', function (Consultation $consultation) {
-                return isset($consultation->schedule) ? Carbon::parse($consultation->schedule)->format('F d, Y') : 'None';
+                return isset($consultation->schedule) ? Carbon::parse($consultation->schedule)->format('F d, Y H:i A') : 'None';
             })
             ->setRowId('id');
     }

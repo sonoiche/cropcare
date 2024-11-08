@@ -25,6 +25,9 @@ class AssociationDataTable extends DataTable
             ->editColumn('created_at', function (Association $item) {
                 return $item->created_at->format('F d, Y');
             })
+            ->editColumn('fname', function (Association $item) {
+                return $item->fname . ' ' . $item->mname . ' ' . $item->lname;
+            })
             ->addColumn('action', 'admin.associations.action')
             ->setRowId('id');
     }
@@ -34,7 +37,8 @@ class AssociationDataTable extends DataTable
      */
     public function query(Association $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->leftJoin('users','users.id','=','associations.president_id')
+            ->select('associations.*','users.fname','users.mname','users.lname');
     }
 
     /**
@@ -64,6 +68,7 @@ class AssociationDataTable extends DataTable
     {
         return [
             Column::make(['data' => 'name', 'title' => 'Association Name']),
+            Column::make(['data' => 'fname', 'title' => 'President Name']),
             Column::make(['data' => 'created_at', 'title' => 'Created Date']),
             Column::computed('action')
                 ->exportable(false)

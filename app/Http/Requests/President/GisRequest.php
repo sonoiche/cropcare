@@ -25,7 +25,6 @@ class GisRequest extends FormRequest
             'farmer_id'     => 'required',
             'name'          => 'required',
             'farm_area'     => 'required',
-            'description'   => 'required',
             'location'      => 'required',
             'latitude'      => 'required|regex:/^[0-9\.]+$/',
             'longitude'     => 'required|regex:/^[0-9\.]+$/'

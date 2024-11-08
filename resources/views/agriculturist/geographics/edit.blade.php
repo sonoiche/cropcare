@@ -1,21 +1,22 @@
-@extends('layouts.app', ['page_title' => 'Add new Consultation'])
+@extends('layouts.app', ['page_title' => 'Update GIS'])
 @section('content')
-<form method="POST" action="{{ url('president/consultations') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ url('agriculturist/geographics', $gis->id) }}" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     <div class="row">
         <div class="col-6">
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
-                        <h5 class="card-title">Add new Consultation</h5>
-                        <h5 class="card-subtitle text-muted d-flex align-items-center">Constultation</h5>
+                        <h5 class="card-title">Update GIS</h5>
+                        <h5 class="card-subtitle text-muted d-flex align-items-center">GIS</h5>
                     </div>
                 </div>
                 <div class="card-body">
-                    @include('president.consultations.form')
+                    @include('agriculturist.geographics.form')
                     <div class="d-flex justify-content-end">
-                        <a href="{{ url('president/consultations') }}" class="btn btn-outline-danger">Cancel</a> &nbsp;
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="{{ url('agriculturist/geographics') }}" class="btn btn-outline-danger">Cancel</a> &nbsp;
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>
                 </div>
             </div>        
@@ -33,11 +34,11 @@
                     <div class="row mb-3" style="margin-top: 15px">
                         <div class="col-md-6">
                             <label class="form-label">Latitude</label>
-                            <input type="text" name="latitude" id="latitude" class="form-control" readonly />
+                            <input type="text" name="latitude" id="latitude" class="form-control" value="{{ $gis->latitude ?? '' }}" readonly />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Longitude</label>
-                            <input type="text" name="longitude" id="longitude" class="form-control" readonly />
+                            <input type="text" name="longitude" id="longitude" class="form-control" value="{{ $gis->longitude ?? '' }}" readonly />
                         </div>
                     </div>
                 </div>
@@ -48,7 +49,7 @@
 @endsection
 
 @push('scripts')
-{!! JsValidator::formRequest('App\Http\Requests\President\ConsultationRequest') !!}
+{!! JsValidator::formRequest('App\Http\Requests\President\GisRequest') !!}
 <script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_api_key') }}&callback=initMap" async defer></script>
 <script>
     let map;

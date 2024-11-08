@@ -9,7 +9,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col mt-0">
-                                    <h5 class="card-title">Farm Lands</h5>
+                                    <h5 class="card-title">{{ auth()->user()->role !== 'Admin' ? 'Tenant' : 'Lands' }}</h5>
                                 </div>
 
                                 <div class="col-auto">
@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h1 class="mt-1 mb-3">0</h1>
+                            <h1 class="mt-1 mb-3">{{ $totalCropsYield }}</h1>
                         </div>
                     </div>
                 </div>
