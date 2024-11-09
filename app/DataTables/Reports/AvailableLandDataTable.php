@@ -30,7 +30,7 @@ class AvailableLandDataTable extends DataTable
                 return $geographic->president->fullname ?? '';
             })
             ->editColumn('fname', function (Geographic $geographic) {
-                return $geographic->fullname ?? '';
+                return $geographic->fname . ' ' .$geographic->mname. ' ' . $geographic->lname;
             })
             ->setRowId('id');
     }
@@ -95,7 +95,10 @@ class AvailableLandDataTable extends DataTable
             Column::make(['data' => 'crop_yield', 'title' => 'Total Crop Yield']),
             Column::make(['data' => 'president_name', 'title' => 'President'])
                 ->searchable(false)
-                ->orderable(false)
+                ->orderable(false),
+            Column::make(['data' => 'status', 'title' => 'Status'])
+                ->searchable(false)
+                ->orderable(false),
         ];
     }
 

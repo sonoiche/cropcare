@@ -53,10 +53,10 @@ class ConsultationDataTable extends DataTable
      */
     public function query(Consultation $model): QueryBuilder
     {
-        $role = $this->role;
+        $role = auth()->user()->role;
         $status = $this->status;
         return $model->when($role, function ($query, $role) {
-            if ($role === 'President') {
+            if ($role == 'President') {
                 return $query->where('consultations.president_id', auth()->user()->id);
             }
         })

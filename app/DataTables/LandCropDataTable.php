@@ -40,6 +40,7 @@ class LandCropDataTable extends DataTable
     {
         $daterange      = $this->daterange;
         $president_id   = $this->president_id;
+        $role           = auth()->user()->role;
         return $model->leftJoin('associations', 'associations.id', '=', 'geographics.association_id')
             ->leftJoin('farm_members','farm_members.id','=','geographics.farmer_id')
             ->select('geographics.*', 'associations.name', 'farm_members.fname','farm_members.lname','farm_members.mname')
@@ -49,8 +50,12 @@ class LandCropDataTable extends DataTable
                 $to   = Carbon::parse($date[1])->format('Y-m-d');
                 return $query->whereRaw("date(geographics.created_at) between ? and ?", [$from, $to]);
             })
-            ->when($president_id, function ($query, $president_id) {
-                return $query->where('geographics.president_id', $president_id);
+            ->when($role, function ($query, $role) use ($president_id) {
+                if($role == 'President') {
+                    $query->where('geographics.president_id', auth()->user()->id);
+                } else {
+                    $query->where('geographics.president_id', $president_id);
+                }
             });
     }
 

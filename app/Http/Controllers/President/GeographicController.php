@@ -53,16 +53,10 @@ class GeographicController extends Controller
      */
     public function store(GisRequest $request)
     {
-        $farmer = FarmMember::firstOrCreate([
-            'fullname'       => $request['fullname'],
-            'association_id' => auth()->user()->association_id,
-            'president_id'   => auth()->user()->id
-        ]);
-
         $gis = new Geographic();
         $gis->president_id      = auth()->user()->id;
         $gis->association_id    = auth()->user()->association_id;
-        $gis->farmer_id         = $farmer->id;
+        $gis->farmer_id         = $request['farmer_id'];
         $gis->consultation_id   = $request['consultation_id'];
         $gis->location          = $request['location'];
         $gis->farm_area         = $request['farm_area'];

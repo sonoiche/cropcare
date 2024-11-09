@@ -41,8 +41,10 @@ class FarmerDataTable extends DataTable
      */
     public function query(FarmMember $model): QueryBuilder
     {
+        $user_id = auth()->user()->id;
         return $model->join('associations', 'farm_members.association_id', '=', 'associations.id')
-            ->select('farm_members.*', 'associations.name');
+            ->select('farm_members.*', 'associations.name')
+            ->where('farm_members.president_id', $user_id);
     }
 
     /**
