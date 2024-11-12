@@ -10,6 +10,11 @@
                 </div>
             </div>
             <div class="card-body">
+                @if (isset($consultation->photo))
+                    <div style="margin: 5px 0">
+                        <img src="{{ $consultation->photo }}" style="width: 100%; height: 300px; object-fit: cover" />
+                    </div>
+                @endif
                 <table class="table table-borderless">
                     <tbody>
                         <tr>

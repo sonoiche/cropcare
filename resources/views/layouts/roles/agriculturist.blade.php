@@ -1,6 +1,7 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{{ url('home') }}">
+            <img src="{{ url('logo.png') }}" style="width: 20%" />
             <span class="align-middle">{{ config('app.name') }}</span>
         </a>
 

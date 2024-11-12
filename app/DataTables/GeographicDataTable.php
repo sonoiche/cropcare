@@ -29,7 +29,7 @@ class GeographicDataTable extends DataTable
                 return $geographic->fullname ?? $geographic->fname;
             })
             ->editColumn('president_name', function (Geographic $geographic) {
-                return $geographic->president->fullname ?? '';
+                return $geographic->president_name . ' ' . $geographic->lname;
             })
             ->addColumn('action', function(Geographic $geographic) {
                 if(auth()->user()->role == 'President') {
@@ -52,8 +52,8 @@ class GeographicDataTable extends DataTable
         $role = auth()->user()->role;
         $president_id = $this->president_id;
         return $model->join('farm_members','farm_members.id','=','geographics.farmer_id')
-            ->select('geographics.*','farm_members.fname','farm_members.mname','farm_members.lname','farm_members.suffix')
-            ->with('president')
+            ->leftJoin('users','users.id','=','geographics.president_id')
+            ->select('geographics.*','farm_members.fname','farm_members.mname','farm_members.lname','farm_members.suffix','users.fname as president_name','users.lname')
             ->when($role, function ($query, $role) {
                 if ($role == 'President') {
                     $query->where('geographics.president_id', auth()->user()->id);
@@ -91,14 +91,12 @@ class GeographicDataTable extends DataTable
     {
         return [
             Column::make(['data' => 'created_at', 'title' => 'Date Added']),
-            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name']),
+            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name', 'name' => 'farm_members.fname']),
             Column::make(['data' => 'location', 'title' => 'Location']),
             Column::make(['data' => 'crop_name', 'title' => 'Crops']),
             Column::make(['data' => 'crop_count', 'title' => 'Crop Count']),
             Column::make(['data' => 'crop_yield', 'title' => 'Total Crop Yield']),
-            Column::make(['data' => 'president_name', 'title' => 'President'])
-                ->searchable(false)
-                ->orderable(false),
+            Column::make(['data' => 'president_name', 'title' => 'President', 'name' => 'users.fname']),
             (auth()->user()->role != 'Admin') ? Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

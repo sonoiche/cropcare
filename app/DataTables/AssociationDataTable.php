@@ -68,7 +68,7 @@ class AssociationDataTable extends DataTable
     {
         return [
             Column::make(['data' => 'name', 'title' => 'Association Name']),
-            Column::make(['data' => 'fname', 'title' => 'President Name']),
+            Column::make(['data' => 'fname', 'title' => 'President Name', 'name' => 'users.fname']),
             Column::make(['data' => 'created_at', 'title' => 'Created Date']),
             Column::computed('action')
                 ->exportable(false)

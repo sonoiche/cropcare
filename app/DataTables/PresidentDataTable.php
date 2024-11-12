@@ -71,7 +71,8 @@ class PresidentDataTable extends DataTable
         return [
             Column::make(['data' => 'fname', 'title' => 'Name']),
             Column::make(['data' => 'barangay', 'title' => 'Barangay']),
-            Column::make(['data' => 'name', 'title' => 'Association Name']),
+            Column::make(['data' => 'name', 'title' => 'Association Name'])
+                ->searchable(false),
             Column::make(['data' => 'members', 'title' => 'Members'])
                 ->searchable(false)
                 ->sortable(false)

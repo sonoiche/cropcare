@@ -73,7 +73,7 @@ class ListingDataTable extends DataTable
                 ->searchable(false)
                 ->orderable(false),
             Column::make(['data' => 'acre_value', 'title' => 'Acre Value']),
-            Column::make(['data' => 'name', 'title' => 'Association']),
+            Column::make(['data' => 'name', 'title' => 'Association', 'name' => 'associations.name']),
             Column::make(['data' => 'status', 'title' => 'Status'])
                 ->addClass('text-center')
                 ->searchable(false)

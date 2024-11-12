@@ -9,7 +9,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col mt-0">
-                                    <h5 class="card-title">{{ auth()->user()->role !== 'Admin' ? 'Tenant' : 'Lands' }}</h5>
+                                    <h5 class="card-title">{{ auth()->user()->role !== 'Admin' ? 'Tenant Lands' : 'Tenant Lands' }}</h5>
                                 </div>
 
                                 <div class="col-auto">

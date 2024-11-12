@@ -86,8 +86,8 @@ class LandCropDataTable extends DataTable
     {
         return [
             Column::make(['data' => 'created_at', 'title' => 'Date']),
-            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name']),
-            Column::make(['data' => 'name', 'title' => 'Association']),
+            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name', 'name' => 'farm_members.fname']),
+            Column::make(['data' => 'name', 'title' => 'Association', 'name' => 'associations.name']),
             Column::make(['data' => 'location', 'title' => 'Location']),
             Column::make(['data' => 'crop_name', 'title' => 'Crop Name']),
             Column::make(['data' => 'crop_count', 'title' => 'Crop Count'])

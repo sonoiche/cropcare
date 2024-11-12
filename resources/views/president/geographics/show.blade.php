@@ -17,10 +17,6 @@
                             <td>{{ $gis->name }}</td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold">Description</td>
-                            <td>{{ $gis->description }}</td>
-                        </tr>
-                        <tr>
                             <td style="font-weight: bold">President</td>
                             <td>{{ $gis->president->fullname ?? '' }}</td>
                         </tr>

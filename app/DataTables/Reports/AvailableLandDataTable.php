@@ -88,7 +88,7 @@ class AvailableLandDataTable extends DataTable
         return [
             Column::make(['data' => 'created_at', 'title' => 'Date Added']),
             Column::make(['data' => 'name', 'title' => 'Geographic Name']),
-            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name']),
+            Column::make(['data' => 'fname', 'title' => 'Farmer\'s Name', 'name' => 'farm_members.fname']),
             Column::make(['data' => 'location', 'title' => 'Location']),
             Column::make(['data' => 'crop_name', 'title' => 'Crops']),
             Column::make(['data' => 'crop_count', 'title' => 'Crop Count']),

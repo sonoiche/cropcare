@@ -44,9 +44,24 @@ class HomeController extends Controller
                     $query->where('president_id', auth()->user()->id);
                 } 
             })->count();
-        $data['availableLands']     = Geographic::where('status', 'Tenant')->count();
-        $data['ownedLands']         = Geographic::where('status', 'Owned')->count();
-        $data['consultationCount']  = Consultation::where('status', '!=', 'Resolve')->count();
+            $data['availableLands']     = Geographic::where('status', 'Tenant')->when($role, function ($query, $role) {
+                if($role == 'President') {
+                    $query->where('president_id', auth()->user()->id);
+                } 
+            })->count();
+        $data['ownedLands']         = Geographic::where('status', 'Owned')->when($role, function ($query, $role) {
+                if($role == 'President') {
+                    $query->where('president_id', auth()->user()->id);
+                } 
+            })->count();
+        $data['consultationCount']  = Consultation::where('status', '!=', 'Resolve')->when($role, function ($query, $role) {
+                if($role == 'President') {
+                    $query->where('president_id', auth()->user()->id);
+                }
+                if($role == 'Agriculturist') {
+                    $query->where('agriculture_id', auth()->user()->id);
+                }
+            })->count();
         $data['totalCropsYield']    = Geographic::when($role, function ($query, $role) {
                 if($role == 'President') {
                     $query->where('president_id', auth()->user()->id);

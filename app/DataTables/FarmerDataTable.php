@@ -80,7 +80,7 @@ class FarmerDataTable extends DataTable
             Column::make(['data' => 'created_at', 'title' => 'Created Date']),
             Column::make(['data' => 'fname', 'title' => 'Fullname']),
             Column::make(['data' => 'contact_number', 'title' => 'Contact Number']),
-            Column::make(['data' => 'name', 'title' => 'Association']),
+            Column::make(['data' => 'name', 'title' => 'Association', 'name' => 'associations.name']),
             Column::make(['data' => 'barangay', 'title' => 'Barangay']),
             Column::computed('action')
                 ->exportable(false)
