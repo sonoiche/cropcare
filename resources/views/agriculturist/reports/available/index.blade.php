@@ -1,13 +1,15 @@
 @extends('layouts.app', ['page_title' => 'Reports'])
 @section('content')
 <div class="row">
-    <div class="col-12 d-flex">
-        <div class="card flex-fill">
+    <div class="col-12">
+        <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0">Farm Lands</h5>
+                <div class="row">
+                    <div class="col-md-5">
+                        <h5 class="card-title mb-0">Farm Lands</h5>
+                    </div>
                 </div>
-                <div style="width: 60%">
+                <div class="col-md-7">
                     <form action="{{ url('agriculturist/reports/available-lands') }}" method="get" class="d-flex justify-cotent-end">
                         <div class="input-group mb-3" style="width: 40%; margin-right: 10px">
                             <span class="input-group-text">

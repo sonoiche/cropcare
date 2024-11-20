@@ -74,7 +74,7 @@
                         <div class="col-6">
                             <div class="mb-3">
                                 <label class="form-label">Schedule</label>
-                                <input type="datetime-local" name="schedule" id="schedule" class="form-control" />
+                                <input type="datetime-local" name="schedule" id="schedule" class="form-control" max="{{ $min_date }}" />
                             </div>
                         </div>
                     </div>

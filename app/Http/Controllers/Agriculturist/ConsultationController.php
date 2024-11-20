@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Mail\SendNotificationJobEmail;
 use App\Models\LandCrop;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class ConsultationController extends Controller
@@ -49,6 +50,7 @@ class ConsultationController extends Controller
     public function show(Request $request, string $id)
     {
         $what = $request['status'];
+        $data['min_date'] = Carbon::now()->addDay()->format('Y-m-d');
 
         switch ($what) {
             case 'Review':

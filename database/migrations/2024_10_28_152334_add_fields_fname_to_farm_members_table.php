@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('farm_members', function (Blueprint $table) {
-            $table->string('fname')->after('fullname')->nullable();
+            $table->string('fname')->after('president_id')->nullable();
             $table->string('mname')->after('fname')->nullable();
             $table->string('lname')->after('mname')->nullable();
             $table->string('suffix')->after('lname')->nullable();

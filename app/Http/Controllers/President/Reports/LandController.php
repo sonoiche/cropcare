@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\President\Reports;
 
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Geographic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\DataTables\LandCropDataTable;
-use App\Models\User;
 
 class LandController extends Controller
 {
@@ -31,7 +33,10 @@ class LandController extends Controller
      */
     public function create()
     {
-        //
+        $month = '';
+        $data['data'] = $this->getMonthlyCropCount($month);
+
+        return response()->json($data);
     }
 
     /**
@@ -39,38 +44,62 @@ class LandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $month = $request['month'];
+        $data['data'] = $this->getMonthlyCropCount($month);
+
+        return response()->json($data);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    private function getMonthlyCropCount($month)
     {
-        //
-    }
+        $label  = [];
+        $data   = [];
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if($month) {
+            $dailyCropCounts = Geographic::select(
+                    DB::raw('DAY(created_at) as day'),
+                    DB::raw('SUM(crop_count) as total_crop_count')
+                )
+                ->whereRaw("month(created_at) = ?", [$month])
+                ->groupBy('day')
+                ->orderBy('day')
+                ->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+            foreach ($dailyCropCounts as $dailyData) {
+                $label[] = $month.'/' . str_pad($dailyData->day, 2, '0', STR_PAD_LEFT);
+                $data[]  = $dailyData->total_crop_count;
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            return [$label, $data];
+        }
+
+        $monthlyCropCounts = Geographic::select(
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('SUM(crop_count) as total_crop_count')
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        foreach ($monthlyCropCounts as $monthlyData) {
+            $monthNames = [
+                1  => 'January',
+                2  => 'February',
+                3  => 'March',
+                4  => 'April',
+                5  => 'May',
+                6  => 'June',
+                7  => 'July',
+                8  => 'August',
+                9  => 'September',
+                10 => 'October',
+                11 => 'November',
+                12 => 'December',
+            ];
+            $label[] = $monthNames[$monthlyData->month];
+            $data[]  = $monthlyData->total_crop_count;
+        }
+
+        return [$label, $data];
     }
 }
