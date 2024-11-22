@@ -3,39 +3,41 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between">
+            <div class="card-header">
                 <div class="row">
-                    <div class="col-md-5">
-                        <h5 class="card-title mb-0">Farm Lands</h5>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title mb-0">Farm Lands</h5>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-7">
-                    <form action="{{ url('agriculturist/reports/available-lands') }}" method="get" class="d-flex justify-cotent-end">
-                        <div class="input-group mb-3" style="width: 40%; margin-right: 10px">
-                            <span class="input-group-text">
-                                <i class="fa fa-calendar" id="date-icon"></i>
-                            </span>
-                            <input type="text" class="form-control" id="daterange" name="daterange" placeholder="Date" value="{{ $daterange ?? '' }}" />
-                        </div>
-                        <div style="width: 25%; margin-right: 10px">
-                            <select name="president_id" id="president_id" class="form-select">
-                                <option value="">All President</option>
-                                @foreach ($presidents as $president)
-                                <option value="{{ $president->id }}" {{ (isset($_GET['president_id']) && $_GET['president_id'] == $president->id) ? 'selected' : '' }}>{{ $president->fullname }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div style="width: 20%">
-                            <select name="status" id="status" class="form-select">
-                                <option value="">All Status</option>
-                                <option value="Tenant" {{ (isset($_GET['status']) && $_GET['status'] == 'Tenant') ? 'selected' : '' }}>Tenant</option>
-                                <option value="Owned" {{ (isset($_GET['status']) && $_GET['status'] == 'Owned') ? 'selected' : '' }}>Owned</option>
-                            </select>
-                        </div>
-                        <div style="width: 250px; margin-left: 10px">
-                            <button class="btn btn-primary">Generate Report</button>
-                        </div>
-                    </form>
+                    <div class="col-md-9" style="float: right">
+                        <form action="{{ url('agriculturist/reports/available-lands') }}" method="get" class="d-flex justify-cotent-end">
+                            <div class="input-group mb-3" style="width: 40%; margin-right: 10px">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar" id="date-icon"></i>
+                                </span>
+                                <input type="text" class="form-control" id="daterange" name="daterange" placeholder="Date" value="{{ $daterange ?? '' }}" />
+                            </div>
+                            <div style="width: 25%; margin-right: 10px">
+                                <select name="president_id" id="president_id" class="form-select">
+                                    <option value="">All President</option>
+                                    @foreach ($presidents as $president)
+                                    <option value="{{ $president->id }}" {{ (isset($_GET['president_id']) && $_GET['president_id'] == $president->id) ? 'selected' : '' }}>{{ $president->fullname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div style="width: 20%">
+                                <select name="status" id="status" class="form-select">
+                                    <option value="">All Status</option>
+                                    <option value="Tenant" {{ (isset($_GET['status']) && $_GET['status'] == 'Tenant') ? 'selected' : '' }}>Tenant</option>
+                                    <option value="Owned" {{ (isset($_GET['status']) && $_GET['status'] == 'Owned') ? 'selected' : '' }}>Owned</option>
+                                </select>
+                            </div>
+                            <div style="width: 250px; margin-left: 10px">
+                                <button class="btn btn-primary">Generate Report</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
