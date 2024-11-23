@@ -89,6 +89,7 @@
 @endsection
 
 @push('scripts')
+{!! JsValidator::formRequest('App\Http\Requests\Agriculturist\ConsultationRequest') !!}
 <script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_api_key') }}&callback=initMap" async defer></script>
 <script>
     function initMap() {

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AgricultureController;
 use App\Http\Controllers\Admin\AssociationController;
+use App\Http\Controllers\Admin\ConsultationController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\PresidentController;
 use App\Http\Controllers\Admin\UserController;
@@ -13,4 +14,5 @@ Route::prefix('admin')->middleware(['auth:web'])->group( function () {
     Route::resource('agricultures', AgricultureController::class);
     Route::resource('listings', ListingController::class);
     Route::resource('associations', AssociationController::class);
+    Route::resource('consultations', ConsultationController::class);
 });

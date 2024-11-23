@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Reports;
 
-use App\DataTables\Reports\ConsultationDataTable;
-use App\Http\Controllers\Controller;
+use App\Models\Consultation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\DataTables\Reports\ConsultationDataTable;
 
 class ConsultationController extends Controller
 {
@@ -22,7 +24,10 @@ class ConsultationController extends Controller
      */
     public function create()
     {
-        //
+        $month = '';
+        $data['data'] = $this->getMonthlyConsultationCount($month);
+
+        return response()->json($data);
     }
 
     /**
@@ -30,7 +35,10 @@ class ConsultationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $month = $request['month'];
+        $data['data'] = $this->getMonthlyConsultationCount($month);
+
+        return response()->json($data);
     }
 
     /**
@@ -41,27 +49,52 @@ class ConsultationController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    private function getMonthlyConsultationCount($month)
     {
-        //
-    }
+        $label  = config('app.barangays');
+        $data   = [];
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        if($month) {
+            $dailyConsultationCount = Consultation::select(
+                    DB::raw('COUNT(location) as total_location'),
+                    'location'
+                )
+                ->whereRaw("month(created_at) = ?", [$month])
+                ->groupBy('location')
+                ->orderBy('location')
+                ->get();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            $consultationCounts = [];
+            foreach ($dailyConsultationCount as $dailyData) {
+                $consultationCounts[$dailyData->location] = $dailyData->total_location;
+            }
+            
+            // Prepare data for each barangay, defaulting to 0 if not found
+            foreach ($label as $barangay) {
+                $data[] = $consultationCounts[$barangay] ?? 0; // Default to 0 if no consultations
+            }
+        
+            return [$label, $data];
+        }
+
+        $monthlyConsultationCounts = Consultation::select(
+                'location',
+                DB::raw('COUNT(location) as total_location')
+            )
+            ->groupBy('location')
+            ->orderBy('location')
+            ->get();
+
+        $monthlyConsultationCountsArray = [];
+        foreach ($monthlyConsultationCounts as $monthlyData) {
+            $monthlyConsultationCountsArray[$monthlyData->location] = $monthlyData->total_location;
+        }
+        
+        // Prepare data for each barangay, defaulting to 0 if not found
+        foreach ($label as $barangay) {
+            $data[] = $monthlyConsultationCountsArray[$barangay] ?? 0; // Default to 0 if no consultations
+        }
+        
+        return [$label, $data];
     }
 }

@@ -31,10 +31,9 @@ class HomeController extends Controller
         // Agriculturist
         if (auth()->user()->role === 'Agriculturist') {
             $data['consultations'] = Consultation::with(['land'])
-                ->where('status', '!=', 'Resolve')
+                ->where('status', 'Submitted')
                 ->latest()
-                ->limit(10)
-                ->get();
+                ->paginate(10);
         }
         
         $role = auth()->user()->role;
@@ -44,7 +43,7 @@ class HomeController extends Controller
                     $query->where('president_id', auth()->user()->id);
                 } 
             })->count();
-            $data['availableLands']     = Geographic::where('status', 'Tenant')->when($role, function ($query, $role) {
+            $data['availableLands'] = Geographic::where('status', 'Tenant')->when($role, function ($query, $role) {
                 if($role == 'President') {
                     $query->where('president_id', auth()->user()->id);
                 } 
@@ -54,12 +53,9 @@ class HomeController extends Controller
                     $query->where('president_id', auth()->user()->id);
                 } 
             })->count();
-        $data['consultationCount']  = Consultation::where('status', '!=', 'Resolve')->when($role, function ($query, $role) {
+        $data['consultationCount']  = Consultation::where('status', 'Submitted')->when($role, function ($query, $role) {
                 if($role == 'President') {
                     $query->where('president_id', auth()->user()->id);
-                }
-                if($role == 'Agriculturist') {
-                    $query->where('agriculture_id', auth()->user()->id);
                 }
             })->count();
         $data['totalCropsYield']    = Geographic::when($role, function ($query, $role) {

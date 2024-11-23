@@ -99,7 +99,7 @@ $(document).ready(function () {
 
     $.ajax({
         type: "GET",
-        url: "{{ url('president/reports/lands/create') }}",
+        url: "{{ url('agriculturist/reports/report-consultations/create') }}",
         dataType: "json",
         success: function (response) {
             myChart = new Chart(ctx, {
@@ -107,7 +107,7 @@ $(document).ready(function () {
                 data: {
                     labels: response.data[0],
                     datasets: [{
-                        label: 'Rice & Corn',
+                        label: 'Consultations',
                         data: response.data[1],
                         borderWidth: 1
                     }]
@@ -133,7 +133,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "{{ url('president/reports/lands') }}",
+            url: "{{ url('agriculturist/reports/report-consultations') }}",
             data: {
                 month: $(this).val()
             },
@@ -144,12 +144,14 @@ $(document).ready(function () {
                     data: {
                         labels: response.data[0],
                         datasets: [{
-                            label: 'Rice & Corn',
+                            label: 'Consultations',
                             data: response.data[1],
                             borderWidth: 1
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
+                        responsive: true,
                         scales: {
                             y: {
                                 beginAtZero: true

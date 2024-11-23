@@ -2,7 +2,7 @@
     <div class="col-12 d-flex">
         <div class="card flex-fill">
             <div class="card-header">
-                <h5 class="card-title mb-0">Latest Consultations</h5>
+                <h5 class="card-title mb-0">Latest Active Consultations</h5>
             </div>
             <div class="card-body">
                 <table class="table table-hover table-striped">
@@ -47,6 +47,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{ $consultations->links('vendor.pagination.bootstrap-5') }}
             </div>
         </div>
     </div>

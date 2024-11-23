@@ -34,7 +34,12 @@
 </div>
 <div class="mb-3">
     <label class="form-label">Farm Location</label>
-    <input type="text" name="location" class="form-control" placeholder="Location" value="{{ $gis->location ?? '' }}" />
+    <select name="location" id="location" class="form-select">
+        <option value="">Select Barangay</option>
+        @foreach (config('app.barangays') as $barangay)
+        <option value="{{ $barangay }}" {{ (isset($gis->location) && $gis->location == $barangay) ? 'selected' : '' }}>{{ $barangay }}</option>
+        @endforeach
+    </select>
 </div>
 <div class="row mb-3">
     <div class="col-md-6">

@@ -8,7 +8,12 @@
 </div>
 <div class="mb-3">
     <label class="form-label">Location</label>
-    <input type="text" name="location" class="form-control" placeholder="Location" value="{{ $consultation->location ?? '' }}" />
+    <select name="location" id="location" class="form-select">
+        <option value="">Select Barangay</option>
+        @foreach (config('app.barangays') as $barangay)
+        <option value="{{ $barangay }}" {{ (isset($consultation->location) && $consultation->location == $barangay) ? 'selected' : '' }}>{{ $barangay }}</option>
+        @endforeach
+    </select>
 </div>
 <div class="mb-3">
     <label class="form-label">Photo</label>

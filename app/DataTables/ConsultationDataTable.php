@@ -33,6 +33,11 @@ class ConsultationDataTable extends DataTable
                 return $consultation->created_at->format('M d, Y');
             })
             ->editColumn('schedule', function (Consultation $consultation) {
+                $today = now();
+                if(isset($consultation->schedule) && $consultation->schedule < $today) {
+                    return '<span class="text-danger">'.Carbon::parse($consultation->schedule)->format('F d, Y h:i A').'</span>';
+                }
+
                 if(isset($consultation->schedule)) {
                     return Carbon::parse($consultation->schedule)->format('F d, Y h:i A');
                 }
@@ -42,10 +47,16 @@ class ConsultationDataTable extends DataTable
                 return $html;
             })
             ->addColumn('action', function (Consultation $consultation) {
-                return view('president.consultations.action', compact('consultation'));
+                if(auth()->user()->role == 'President') {
+                    return view('president.consultations.action', compact('consultation'));
+                }
+
+                if(auth()->user()->role == 'Agriculturist') {
+                    return view('agriculturist.consultations.action', compact('consultation'));
+                }
             })
             ->setRowId('id')
-            ->rawColumns(['status','action']);
+            ->rawColumns(['schedule','status','action']);
     }
 
     /**
@@ -55,9 +66,24 @@ class ConsultationDataTable extends DataTable
     {
         $role = auth()->user()->role;
         $status = $this->status;
-        return $model->when($role, function ($query, $role) {
+        return $model->when($role, function ($query, $role) use ($status) {
             if ($role == 'President') {
                 return $query->where('consultations.president_id', auth()->user()->id);
+            }
+
+            if ($role == 'Agriculturist' && $status == '') {
+                return $query->where('consultations.agriculture_id', auth()->user()->id)
+                    ->where(function ($query) {
+                        $query->where('schedule', '>', Carbon::now()) // Get future schedules
+                            ->orWhere(function ($subQuery) {
+                                $subQuery->where('schedule', '<=', Carbon::now())
+                                    ->where('status', '!=', 'Resolve'); // Exclude resolved past schedules
+                            });
+                });
+            }
+
+            if ($role == 'Agriculturist' && $status != '') {
+                return $query->where('consultations.agriculture_id', auth()->user()->id);
             }
         })
         ->when($status, function ($query, $status) {
@@ -97,10 +123,18 @@ class ConsultationDataTable extends DataTable
                 Column::make(['data' => 'pres_name', 'title' => 'President']),
                 Column::make(['data' => 'farmer_fullname', 'title' => 'Farmer Name']),
                 Column::make(['data' => 'location']),
-                Column::make(['data' => 'status']),
+                Column::make(['data' => 'status'])
+                    ->searchable(false)
+                    ->sortable(false)
+                    ->addClass('text-center'),
                 Column::make(['data' => 'schedule']),
                 Column::make(['data' => 'concern', 'title' => 'Cover Letter / Concern'])
-                    ->width(250)
+                    ->width(250),
+                Column::computed('action')
+                    ->exportable(false)
+                    ->printable(false)
+                    ->width(150)
+                    ->addClass('text-center')
             ];
         }
 
@@ -109,7 +143,9 @@ class ConsultationDataTable extends DataTable
             Column::make(['data' => 'title']),
             Column::make(['data' => 'farmer_fullname', 'title' => 'Farmer Name']),
             Column::make(['data' => 'location']),
-            Column::make(['data' => 'status']),
+            Column::make(['data' => 'status'])
+                ->searchable(false)
+                ->sortable(false),
             Column::make(['data' => 'schedule']),
             Column::make(['data' => 'concern', 'title' => 'Cover Letter / Concern'])
                 ->width(200),

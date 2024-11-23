@@ -123,5 +123,24 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'google_api_key' => env('GOOGLE_MAP_KEY')
+    'google_api_key' => env('GOOGLE_MAP_KEY'),
+
+    'barangays' => [
+        'Bayaoas',
+        'Baybay',
+        'Bocacliw',
+        'Bocboc East',
+        'Bocboc West',
+        'Buer',
+        'Calsib',
+        'Laoag',
+        'Manlocboc',
+        'Niñoy',
+        'Panacol',
+        'Poblacion',
+        'Pogomboa',
+        'Pogonsili',
+        'San Jose',
+        'Tampac'
+    ]
 ];

@@ -29,6 +29,22 @@
 @push('scripts')
 {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 <script>
+function resolveConsultation(id) {
+    if(confirm('Are you sure you want to change it\'s status to resolve?')) {
+        $.ajax({
+            type: "POST",
+            url: "{{ url('admin/consultations') }}/" + id,
+            data: {
+                _method: 'PUT'
+            },
+            dataType: "json",
+            success: function (response) {
+                location.reload();
+            }
+        });
+    }
+}
+
 function removeConsultation(id) {
     if(confirm('Are you sure you want to delete this consultation?')) {
         $.ajax({

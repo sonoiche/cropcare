@@ -32,7 +32,12 @@
 </div>
 <div class="mb-3">
     <label class="form-label">Barangay</label>
-    <input type="text" name="barangay" class="form-control" placeholder="Barangay" value="{{ $farmer->barangay ?? '' }}" />
+    <select name="barangay" id="barangay" class="form-select">
+        <option value="">Select Barangay</option>
+        @foreach (config('app.barangays') as $barangay)
+        <option value="{{ $barangay }}" {{ (isset($farmer->barangay) && $farmer->barangay == $barangay) ? 'selected' : '' }}>{{ $barangay }}</option>
+        @endforeach
+    </select>
 </div>
 <div class="mb-3">
     <label class="form-label">Photo</label>

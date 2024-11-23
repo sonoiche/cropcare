@@ -8,6 +8,7 @@ use App\Models\FarmMember;
 use App\Models\Consultation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Agriculturist\ConsultationRequest;
 use App\Mail\SendNotificationJobEmail;
 use App\Models\LandCrop;
 use Carbon\Carbon;
@@ -107,11 +108,12 @@ class ConsultationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ConsultationRequest $request, string $id)
     {
         $consultation = Consultation::find($id);
-        $consultation->status   = $request['status'];
-        $consultation->schedule = $request['schedule'];
+        $consultation->status           = $request['status'];
+        $consultation->schedule         = $request['schedule'];
+        $consultation->agriculture_id   = auth()->user()->id;
         $consultation->save();
 
         return redirect()->to('agriculturist/consultations');
