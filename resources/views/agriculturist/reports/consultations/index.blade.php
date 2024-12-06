@@ -40,6 +40,9 @@
                         {!! $dataTable->table() !!}
                     </div>
                     <div class="tab-pane fade" id="chart" role="tabpanel" aria-labelledby="chart-tab">
+                        <div>
+                            <h3>Barangay Consultation Report</h3>
+                        </div>
                         <div style="float: right">
                             <select name="month" id="month" class="form-select" style="width: 100%">
                                 <option value="">All Months</option>
@@ -96,10 +99,10 @@ $(document).ready(function () {
 
     const ctx = document.getElementById('myChart').getContext('2d');
     let myChart;
-
+    var consultation_type = $('#type').val();
     $.ajax({
         type: "GET",
-        url: "{{ url('agriculturist/reports/report-consultations/create') }}",
+        url: "{{ url('agriculturist/reports/report-consultations/create') }}?type=" + consultation_type,
         dataType: "json",
         success: function (response) {
             myChart = new Chart(ctx, {
@@ -109,7 +112,25 @@ $(document).ready(function () {
                     datasets: [{
                         label: 'Consultations',
                         data: response.data[1],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        backgroundColor: [
+                            '#FF5733',
+                            '#33FF57',
+                            '#3357FF',
+                            '#F1C40F',
+                            '#8E44AD',
+                            '#E67E22',
+                            '#2ECC71',
+                            '#3498DB',
+                            '#E74C3C',
+                            '#9B59B6',
+                            '#1ABC9C',
+                            '#F39C12',
+                            '#D35400',
+                            '#2980B9',
+                            '#C0392B',
+                            '#9694FF'
+                        ],
                     }]
                 },
                 options: {
@@ -133,7 +154,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "{{ url('agriculturist/reports/report-consultations') }}",
+            url: "{{ url('agriculturist/reports/report-consultations') }}?type=" + consultation_type,
             data: {
                 month: $(this).val()
             },
@@ -143,11 +164,31 @@ $(document).ready(function () {
                     type: 'bar',
                     data: {
                         labels: response.data[0],
-                        datasets: [{
-                            label: 'Consultations',
-                            data: response.data[1],
-                            borderWidth: 1
-                        }]
+                        datasets: [
+                            {
+                                label: 'Consultations',
+                                data: response.data[1],
+                                borderWidth: 1,
+                                backgroundColor: [
+                                    '#FF5733',
+                                    '#33FF57',
+                                    '#3357FF',
+                                    '#F1C40F',
+                                    '#8E44AD',
+                                    '#E67E22',
+                                    '#2ECC71',
+                                    '#3498DB',
+                                    '#E74C3C',
+                                    '#9B59B6',
+                                    '#1ABC9C',
+                                    '#F39C12',
+                                    '#D35400',
+                                    '#2980B9',
+                                    '#C0392B',
+                                    '#7D3C98'
+                                ],
+                            }
+                        ]
                     },
                     options: {
                         indexAxis: 'y',

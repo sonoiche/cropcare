@@ -53,12 +53,14 @@ class LandController extends Controller
     private function getMonthlyCropCount($month)
     {
         $label  = [];
-        $data   = [];
+        $rice   = [];
+        $corn   = [];
 
         if($month) {
             $dailyCropCounts = Geographic::select(
                     DB::raw('DAY(created_at) as day'),
-                    DB::raw('SUM(crop_count) as total_crop_count')
+                    DB::raw('SUM(CASE WHEN crop_name = "rice" THEN crop_count ELSE 0 END) as total_rice_count'),
+                    DB::raw('SUM(CASE WHEN crop_name = "corn" THEN crop_count ELSE 0 END) as total_corn_count')
                 )
                 ->whereRaw("month(created_at) = ?", [$month])
                 ->groupBy('day')
@@ -66,16 +68,18 @@ class LandController extends Controller
                 ->get();
 
             foreach ($dailyCropCounts as $dailyData) {
-                $label[] = $month.'/' . str_pad($dailyData->day, 2, '0', STR_PAD_LEFT);
-                $data[]  = $dailyData->total_crop_count;
+                $label[]    = $month.'/' . str_pad($dailyData->day, 2, '0', STR_PAD_LEFT);
+                $rice[]     = $dailyData->total_rice_count;
+                $corn[]     = $dailyData->total_corn_count;
             }
 
-            return [$label, $data];
+            return [$label, $rice, $corn];
         }
 
         $monthlyCropCounts = Geographic::select(
                 DB::raw('MONTH(created_at) as month'),
-                DB::raw('SUM(crop_count) as total_crop_count')
+                DB::raw('SUM(CASE WHEN crop_name = "rice" THEN crop_count ELSE 0 END) as total_rice_count'),
+                DB::raw('SUM(CASE WHEN crop_name = "corn" THEN crop_count ELSE 0 END) as total_corn_count')
             )
             ->groupBy('month')
             ->orderBy('month')
@@ -97,9 +101,10 @@ class LandController extends Controller
                 12 => 'December',
             ];
             $label[] = $monthNames[$monthlyData->month];
-            $data[]  = $monthlyData->total_crop_count;
+            $rice[]  = $monthlyData->total_rice_count;
+            $corn[]  = $monthlyData->total_corn_count;
         }
 
-        return [$label, $data];
+        return [$label, $rice, $corn];
     }
 }

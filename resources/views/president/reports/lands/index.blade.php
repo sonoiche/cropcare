@@ -43,6 +43,9 @@
                         {!! $dataTable->table() !!}
                     </div>
                     <div class="tab-pane fade" id="chart" role="tabpanel" aria-labelledby="chart-tab">
+                        <div>
+                            <h2>Total Crop Count</h2>
+                        </div>
                         <div style="float: right">
                             <select name="month" id="month" class="form-select" style="width: 100%">
                                 <option value="">All Months</option>
@@ -107,11 +110,20 @@ $(document).ready(function () {
                 type: 'bar',
                 data: {
                     labels: response.data[0],
-                    datasets: [{
-                        label: 'Rice & Corn',
-                        data: response.data[1],
-                        borderWidth: 1
-                    }]
+                    datasets: [
+                        {
+                            label: 'Rice',
+                            data: response.data[1],
+                            borderWidth: 1,
+                            backgroundColor: 'rgba(255, 99, 132, 1)'
+                        },
+                        {
+                            label: 'Corn',
+                            data: response.data[2],
+                            borderWidth: 1,
+                            backgroundColor: 'rgba(255, 255, 0, 1)'
+                        },
+                    ]
                 },
                 options: {
                     scales: {
@@ -142,11 +154,20 @@ $(document).ready(function () {
                     type: 'bar',
                     data: {
                         labels: response.data[0],
-                        datasets: [{
-                            label: 'Rice & Corn',
-                            data: response.data[1],
-                            borderWidth: 1
-                        }]
+                        datasets: [
+                            {
+                                label: 'Rice',
+                                data: response.data[1],
+                                borderWidth: 1,
+                                backgroundColor: 'rgba(255, 99, 132, 1)'
+                            },
+                            {
+                                label: 'Corn',
+                                data: response.data[2],
+                                borderWidth: 1,
+                                backgroundColor: 'rgba(255, 255, 0, 1)'
+                            },
+                        ]
                     },
                     options: {
                         scales: {
