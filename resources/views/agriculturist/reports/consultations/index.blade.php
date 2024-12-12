@@ -43,6 +43,7 @@
                         <div>
                             <h3>Barangay Consultation Report</h3>
                         </div>
+                        <a href="javascript:;" class="btn btn-secondary" id="printBtn">Print</a>
                         <div style="float: right">
                             <select name="month" id="month" class="form-select" style="width: 100%">
                                 <option value="">All Months</option>
@@ -78,6 +79,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 $(document).ready(function () {
     var start = moment().subtract(29, 'days');
@@ -202,6 +204,35 @@ $(document).ready(function () {
                 });
             }
         });
+    });
+});
+
+document.getElementById('printBtn').addEventListener('click', function() {
+    html2canvas(document.getElementById('myChart')).then(function(canvas) {
+        const imgData = canvas.toDataURL('image/png');
+
+        // Create an iframe for printing
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write('<html><head><title>Barangay Consultation</title></head><body>');
+        doc.write('<img src="' + imgData + '" style="width:100%;"/>');
+        doc.write('</body></html>');
+        doc.close();
+
+        // Wait for the iframe to load before printing
+        iframe.contentWindow.onload = function() {
+            iframe.contentWindow.print();
+            document.body.removeChild(iframe); // Clean up the iframe after printing
+        };
+    }).catch(function(error) {
+        console.error('Error capturing the chart:', error);
     });
 });
 </script>
