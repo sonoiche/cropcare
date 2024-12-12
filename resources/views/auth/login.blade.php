@@ -17,9 +17,20 @@
 
         <link href="{{ url('assets/css/app.css') }}" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+        <style>
+            .login-bg {
+                background-image: url('../../assets/img/login-bg.jpg');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            body {
+                background-color: #dcecc9;
+            }
+        </style>
     </head>
 
-    <body>
+    <body class="login-bg">
         <main class="d-flex w-100">
             <div class="container d-flex flex-column">
                 <div class="row vh-100">
